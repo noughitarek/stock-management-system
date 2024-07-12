@@ -52,7 +52,8 @@ return array(
     array(
         "type" => "link",
         "content" => "Fournisseurs",
-        "route" => "suppliers",
+        "active_when" => ["App\Http\Controllers\SupplierController#"],
+        "route" => "/suppliers",
         "icon" => array("type" => "lucide", "content" => "Contact"),
     ),
     array(

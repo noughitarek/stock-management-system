@@ -40,3 +40,15 @@ export interface Product{
     created_by: User;
     updated_by: User;
 }
+
+export interface Supplier{
+    id: number;
+    name: string;
+    phone: string;
+    address: string;
+    description: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: User;
+    updated_by: User;
+}

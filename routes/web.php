@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RubriqueController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 
 
@@ -30,6 +31,15 @@ Route::middleware(['auth'])->group(function () {
         'edit' => 'products.edit',
         'update' => 'products.update',
         'destroy' => 'products.destroy',
+    ]);
+    Route::resource('suppliers', SupplierController::class)->names([
+        'index' => 'suppliers.index',
+        'create' => 'suppliers.create',
+        'store' => 'suppliers.store',
+        'show' => 'suppliers.show',
+        'edit' => 'suppliers.edit',
+        'update' => 'suppliers.update',
+        'destroy' => 'suppliers.destroy',
     ]);
 });
 
