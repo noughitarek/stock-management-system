@@ -8,18 +8,18 @@ import { MenuItem } from '@/types/MenuItem'
 interface WebmasterProps {
     user: User;
     menu: MenuItem[];
-    header?: ReactNode;
+    breadcrumb?: ReactNode;
     children?: React.ReactNode;
 }
 
-const Webmaster: React.FC<WebmasterProps> = ({ user, menu, header, children }) => {
+const Webmaster: React.FC<WebmasterProps> = ({ user, menu, breadcrumb, children }) => {
     return (
         <>
             <MobileMenu menuItems={menu}/>
             <div className="flex mt-[4.7rem] md:mt-0 overflow-hidden">
                 <SideMenu menuItems={menu} />
                 <div className="content">
-                    <Topbar/>
+                    <Topbar breadcrumb={breadcrumb}/>
                     {children}
                 </div>
             </div>

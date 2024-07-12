@@ -4266,6 +4266,19 @@ select{
    |
    */
 /* Default colors */
+.primary-toast {
+  background: var(--color-primary);
+  color: #FFFFFF;
+}
+.danger-toast {
+  background: var(--color-danger);
+  color: #FFFFFF;
+}
+.warning-toast {
+  background: var(--color-warning);
+  color: #FFFFFF;
+}
+
 :root {
     --color-primary: 6 78 59;
     --color-secondary: 226 232 240;

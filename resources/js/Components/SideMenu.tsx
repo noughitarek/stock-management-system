@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { MenuItem } from '@/types/MenuItem';
+import Icon from './Icon';
+import { CornerDownRight } from 'lucide-react';
 
 interface SideMenuProps {
     menuItems: MenuItem[];
@@ -9,8 +11,8 @@ const SideMenu: React.FC<SideMenuProps> = ({ menuItems }) => {
     return (
         <nav className="side-nav">
             <Link href="" className="intro-x flex items-center pl-5 pt-4 mt-3">
-                <img alt="Midone - HTML Admin Template" className="w-6" src="dist/images/logo.svg" />
-                <span className="hidden xl:block text-white text-lg ml-3"> Tinker </span>
+                <img alt="Midone - HTML Admin Template" className="w-6" src="/dist/images/stock.png" />
+                <span className="hidden xl:block text-white text-lg ml-3"> Inventaire </span>
             </Link>
             <div className="side-nav__divider my-6"></div>
             <ul>
@@ -23,7 +25,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ menuItems }) => {
                                         menuItem.icon.type === 'feather' ? (
                                             <i className="align-middle" data-feather={menuItem.icon.content}></i>
                                         ) : (
-                                            <i data-lucide={menuItem.icon.content}></i>
+                                            <Icon name={menuItem.icon.content} className="align-middle" />
                                         )
                                     )}
                                 </div>
@@ -40,7 +42,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ menuItems }) => {
                                                 menuItem.icon.type === 'feather' ? (
                                                     <i className="align-middle" data-feather={menuItem.icon.content}></i>
                                                 ) : (
-                                                    <i data-lucide={menuItem.icon.content}></i>
+                                                    <Icon name={menuItem.icon.content} className="align-middle" />
                                                 )
                                             )}
                                         </div>
@@ -53,7 +55,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ menuItems }) => {
                                             {subMenuItem.route && (
                                                 <Link href={subMenuItem.route} className="side-menu">
                                                     <div className="side-menu__icon">
-                                                        <i data-lucide="corner-down-right"></i>
+                                                        <CornerDownRight/>
                                                     </div>
                                                     <div className="side-menu__title"> {subMenuItem.content} </div>
                                                 </Link>

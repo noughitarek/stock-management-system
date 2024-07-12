@@ -13,3 +13,19 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         menu: MenuItem[];
     };
 };
+
+export interface User{
+    id: number;
+    name: string;
+    role: string;
+}
+
+export interface Rubrique{
+    id: number;
+    name: string;
+    description: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: User;
+    updated_by: User;
+}

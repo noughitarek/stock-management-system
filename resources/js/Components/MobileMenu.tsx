@@ -10,7 +10,7 @@ const MobileMenu:React.FC<MobileMenuProps> = ({menuItems}) => {
         <div className="mobile-menu md:hidden">
             <div className="mobile-menu-bar">
                 <Link href="" className="flex mr-auto">
-                    <img alt="Midone - HTML Admin Template" className="w-6" src="dist/images/logo.svg"/>
+                    <img alt="Midone - HTML Admin Template" className="w-6" src="/dist/images/stock.png"/>
                 </Link>
                 <Link href="" className="mobile-menu-toggler"> <i data-lucide="bar-chart-2" className="w-8 h-8 text-white transform -rotate-90"></i> </Link>
             </div>

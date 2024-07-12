@@ -9,7 +9,8 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="dist/css/app.css" />
+        <link rel="stylesheet" href="/dist/css/app.css" />
+        <link rel="icon" type="image/png" href="/dist/images/stock.png" />
 
         <!-- Scripts -->
         @routes
@@ -18,9 +19,11 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased py-5 md:py-0 bg-black/[0.15] dark:bg-transparent">
+        <div id="main">
         @inertia
+        </div>
         <!--<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=["your-google-map-api"]&libraries=places"></script>-->
-        <script src="dist/js/app.js" defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=["your-google-map-api"]&libraries=places"></script>
+        <script src="dist/js/app.js" defer></script>-->
     </body>
 </html>

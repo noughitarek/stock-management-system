@@ -44,4 +44,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function createdRubriques()
+    {
+        return $this->hasMany(Rubrique::class, 'created_by');
+    }
+    public function updatedRubriques()
+    {
+        return $this->hasMany(Rubrique::class, 'updated_by');
+    }
+    public function deletedRubriques()
+    {
+        return $this->hasMany(Rubrique::class, 'deleted_by');
+    }
+
+    public function Has_Permissions($permissions)
+    {
+        return true;
+    }
 }

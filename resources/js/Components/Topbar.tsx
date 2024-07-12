@@ -1,32 +1,38 @@
-export default function Topbar() {
+import { Bell, CreditCard, Edit, HelpCircle, Inbox, Lock, Search, ToggleRight, User, Users } from 'lucide-react';
+import { ReactNode } from 'react';
+
+interface TopbarProps{
+    breadcrumb?: ReactNode;
+}
+const Topbar: React.FC<TopbarProps> = ({ breadcrumb }) => {
     return (
         <div className="top-bar -mx-4 px-4 md:mx-0 md:px-0">
-            <nav aria-label="breadcrumb" className="-intro-x mr-auto hidden sm:flex">
+            <nav aria-label="breadcrumb" className="mr-auto hidden sm:flex">
                 <ol className="breadcrumb">
-                    <li className="breadcrumb-item"><a href="#">Application</a></li>
-                    <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    <li className="breadcrumb-item"><a href={route('dashboard')}>Inventaire</a></li>
+                    {breadcrumb}
                 </ol>
             </nav>
-            <div className="intro-x relative mr-3 sm:mr-6">
+            <div className="relative mr-3 sm:mr-6">
                 <div className="search hidden sm:block">
                     <input type="text" className="search__input form-control border-transparent" placeholder="Search..."/>
-                        <i data-lucide="search" className="search__icon dark:text-slate-500"></i>
+                        <Search className="search__icon dark:text-slate-500"/>
                 </div>
-                <a className="notification sm:hidden" href=""> <i data-lucide="search" className="notification__icon dark:text-slate-500"></i> </a>
+                <a className="notification sm:hidden" href=""> <Search className="notification__icon dark:text-slate-500"/> </a>
                 <div className="search-result">
                     <div className="search-result__content">
                         <div className="search-result__content__title">Pages</div>
                         <div className="mb-5">
                             <a href="" className="flex items-center">
-                                <div className="w-8 h-8 bg-success/20 dark:bg-success/10 text-success flex items-center justify-center rounded-full"> <i className="w-4 h-4" data-lucide="inbox"></i> </div>
+                                <div className="w-8 h-8 bg-success/20 dark:bg-success/10 text-success flex items-center justify-center rounded-full"> <Inbox className="w-4 h-4"/> </div>
                                 <div className="ml-3">Mail Settings</div>
                             </a>
                             <a href="" className="flex items-center mt-2">
-                                <div className="w-8 h-8 bg-pending/10 text-pending flex items-center justify-center rounded-full"> <i className="w-4 h-4" data-lucide="users"></i> </div>
+                                <div className="w-8 h-8 bg-pending/10 text-pending flex items-center justify-center rounded-full"> <Users className="w-4 h-4"/> </div>
                                 <div className="ml-3">Users & Permissions</div>
                             </a>
                             <a href="" className="flex items-center mt-2">
-                                <div className="w-8 h-8 bg-primary/10 dark:bg-primary/20 text-primary/80 flex items-center justify-center rounded-full"> <i className="w-4 h-4" data-lucide="credit-card"></i> </div>
+                                <div className="w-8 h-8 bg-primary/10 dark:bg-primary/20 text-primary/80 flex items-center justify-center rounded-full"> <CreditCard className="w-4 h-4"/> </div>
                                 <div className="ml-3">Transactions Report</div>
                             </a>
                         </div>
@@ -34,28 +40,28 @@ export default function Topbar() {
                         <div className="mb-5">
                             <a href="" className="flex items-center mt-2">
                                 <div className="w-8 h-8 image-fit">
-                                    <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-2.jpg"/>
+                                    <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-2.jpg"/>
                                 </div>
                                 <div className="ml-3">sssssssssss sssssssss</div>
                                 <div className="ml-auto w-48 truncate text-slate-500 text-xs text-right">keanureeves@left4code.com</div>
                             </a>
                             <a href="" className="flex items-center mt-2">
                                 <div className="w-8 h-8 image-fit">
-                                    <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-3.jpg"/>
+                                    <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-3.jpg"/>
                                 </div>
                                 <div className="ml-3">Angelina Jolie</div>
                                 <div className="ml-auto w-48 truncate text-slate-500 text-xs text-right">angelinajolie@left4code.com</div>
                             </a>
                             <a href="" className="flex items-center mt-2">
                                 <div className="w-8 h-8 image-fit">
-                                    <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-13.jpg"/>
+                                    <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-13.jpg"/>
                                 </div>
                                 <div className="ml-3">Brad Pitt</div>
                                 <div className="ml-auto w-48 truncate text-slate-500 text-xs text-right">bradpitt@left4code.com</div>
                             </a>
                             <a href="" className="flex items-center mt-2">
                                 <div className="w-8 h-8 image-fit">
-                                    <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-4.jpg"/>
+                                    <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-4.jpg"/>
                                 </div>
                                 <div className="ml-3">John Travolta</div>
                                 <div className="ml-auto w-48 truncate text-slate-500 text-xs text-right">johntravolta@left4code.com</div>
@@ -64,28 +70,28 @@ export default function Topbar() {
                         <div className="search-result__content__title">Products</div>
                         <a href="" className="flex items-center mt-2">
                             <div className="w-8 h-8 image-fit">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/preview-1.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/preview-1.jpg"/>
                             </div>
                             <div className="ml-3">Apple MacBook Pro 13</div>
                             <div className="ml-auto w-48 truncate text-slate-500 text-xs text-right">PC &amp; Laptop</div>
                         </a>
                         <a href="" className="flex items-center mt-2">
                             <div className="w-8 h-8 image-fit">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/preview-7.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/preview-7.jpg"/>
                             </div>
                             <div className="ml-3">Dell XPS 13</div>
                             <div className="ml-auto w-48 truncate text-slate-500 text-xs text-right">PC &amp; Laptop</div>
                         </a>
                         <a href="" className="flex items-center mt-2">
                             <div className="w-8 h-8 image-fit">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/preview-1.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/preview-1.jpg"/>
                             </div>
                             <div className="ml-3">Samsung Galaxy S20 Ultra</div>
                             <div className="ml-auto w-48 truncate text-slate-500 text-xs text-right">Smartphone &amp; Tablet</div>
                         </a>
                         <a href="" className="flex items-center mt-2">
                             <div className="w-8 h-8 image-fit">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/preview-3.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/preview-3.jpg"/>
                             </div>
                             <div className="ml-3">Apple MacBook Pro 13</div>
                             <div className="ml-auto w-48 truncate text-slate-500 text-xs text-right">PC &amp; Laptop</div>
@@ -93,14 +99,16 @@ export default function Topbar() {
                     </div>
                 </div>
             </div>
-            <div className="intro-x dropdown mr-auto sm:mr-6">
-                <div className="dropdown-toggle notification notification--bullet cursor-pointer" role="button" aria-expanded="false" data-tw-toggle="dropdown"> <i data-lucide="bell" className="notification__icon dark:text-slate-500"></i> </div>
+            <div className="dropdown mr-auto sm:mr-6">
+                <div className="dropdown-toggle notification notification--bullet cursor-pointer" role="button" aria-expanded="false" data-tw-toggle="dropdown"> 
+                    <Bell className="notification__icon dark:text-slate-500"/>
+                </div>
                 <div className="notification-content pt-2 dropdown-menu">
                     <div className="notification-content__box dropdown-content">
                         <div className="notification-content__title">Notifications</div>
                         <div className="cursor-pointer relative flex items-center ">
                             <div className="w-12 h-12 flex-none image-fit mr-1">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-2.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-2.jpg"/>
                                     <div className="w-3 h-3 bg-success absolute right-0 bottom-0 rounded-full border-2 border-white dark:border-darkmode-600"></div>
                             </div>
                             <div className="ml-2 overflow-hidden">
@@ -113,7 +121,7 @@ export default function Topbar() {
                         </div>
                         <div className="cursor-pointer relative flex items-center mt-5">
                             <div className="w-12 h-12 flex-none image-fit mr-1">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-3.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-3.jpg"/>
                                     <div className="w-3 h-3 bg-success absolute right-0 bottom-0 rounded-full border-2 border-white dark:border-darkmode-600"></div>
                             </div>
                             <div className="ml-2 overflow-hidden">
@@ -126,7 +134,7 @@ export default function Topbar() {
                         </div>
                         <div className="cursor-pointer relative flex items-center mt-5">
                             <div className="w-12 h-12 flex-none image-fit mr-1">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-13.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-13.jpg"/>
                                     <div className="w-3 h-3 bg-success absolute right-0 bottom-0 rounded-full border-2 border-white dark:border-darkmode-600"></div>
                             </div>
                             <div className="ml-2 overflow-hidden">
@@ -139,7 +147,7 @@ export default function Topbar() {
                         </div>
                         <div className="cursor-pointer relative flex items-center mt-5">
                             <div className="w-12 h-12 flex-none image-fit mr-1">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-4.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-4.jpg"/>
                                     <div className="w-3 h-3 bg-success absolute right-0 bottom-0 rounded-full border-2 border-white dark:border-darkmode-600"></div>
                             </div>
                             <div className="ml-2 overflow-hidden">
@@ -152,7 +160,7 @@ export default function Topbar() {
                         </div>
                         <div className="cursor-pointer relative flex items-center mt-5">
                             <div className="w-12 h-12 flex-none image-fit mr-1">
-                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="dist/images/profile-15.jpg"/>
+                                <img alt="Midone - HTML Admin Template" className="rounded-full" src="/dist/images/profile-15.jpg"/>
                                     <div className="w-3 h-3 bg-success absolute right-0 bottom-0 rounded-full border-2 border-white dark:border-darkmode-600"></div>
                             </div>
                             <div className="ml-2 overflow-hidden">
@@ -166,9 +174,9 @@ export default function Topbar() {
                     </div>
                 </div>
             </div>
-            <div className="intro-x dropdown w-8 h-8">
+            <div className="dropdown w-8 h-8">
                 <div className="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in" role="button" aria-expanded="false" data-tw-toggle="dropdown">
-                    <img alt="Midone - HTML Admin Template" src="dist/images/profile-5.jpg"/>
+                    <img alt="Midone - HTML Admin Template" src="/dist/images/profile-5.jpg"/>
                 </div>
                 <div className="dropdown-menu w-56">
                     <ul className="dropdown-content bg-primary text-white">
@@ -180,22 +188,22 @@ export default function Topbar() {
                             <hr className="dropdown-divider border-white/[0.08]"/>
                         </li>
                         <li>
-                            <a href="" className="dropdown-item hover:bg-white/5"> <i data-lucide="user" className="w-4 h-4 mr-2"></i> Profile </a>
+                            <a href="" className="dropdown-item hover:bg-white/5"> <User className="w-4 h-4 mr-2"/> Profile </a>
                         </li>
                         <li>
-                            <a href="" className="dropdown-item hover:bg-white/5"> <i data-lucide="edit" className="w-4 h-4 mr-2"></i> Add Account </a>
+                            <a href="" className="dropdown-item hover:bg-white/5"> <Edit className="w-4 h-4 mr-2"/> Add Account </a>
                         </li>
                         <li>
-                            <a href="" className="dropdown-item hover:bg-white/5"> <i data-lucide="lock" className="w-4 h-4 mr-2"></i> Reset Password </a>
+                            <a href="" className="dropdown-item hover:bg-white/5"> <Lock className="w-4 h-4 mr-2"/> Reset Password </a>
                         </li>
                         <li>
-                            <a href="" className="dropdown-item hover:bg-white/5"> <i data-lucide="help-circle" className="w-4 h-4 mr-2"></i> Help </a>
+                            <a href="" className="dropdown-item hover:bg-white/5"> <HelpCircle className="w-4 h-4 mr-2"/> Help </a>
                         </li>
                         <li>
                             <hr className="dropdown-divider border-white/[0.08]"/>
                         </li>
                         <li>
-                            <a href="" className="dropdown-item hover:bg-white/5"> <i data-lucide="toggle-right" className="w-4 h-4 mr-2"></i> Logout </a>
+                            <a href="" className="dropdown-item hover:bg-white/5"> <ToggleRight className="w-4 h-4 mr-2"/> Logout </a>
                         </li>
                     </ul>
                 </div>
@@ -204,3 +212,4 @@ export default function Topbar() {
 
     );
 }
+export default Topbar;
