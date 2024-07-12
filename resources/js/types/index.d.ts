@@ -52,3 +52,15 @@ export interface Supplier{
     created_by: User;
     updated_by: User;
 }
+
+export interface Service{
+    id: number;
+    name: string;
+    description: string;
+    responsible_name: string;
+    responsible_phone: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: User;
+    updated_by: User;
+}

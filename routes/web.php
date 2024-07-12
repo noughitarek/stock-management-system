@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
@@ -40,6 +41,15 @@ Route::middleware(['auth'])->group(function () {
         'edit' => 'suppliers.edit',
         'update' => 'suppliers.update',
         'destroy' => 'suppliers.destroy',
+    ]);
+    Route::resource('services', ServiceController::class)->names([
+        'index' => 'services.index',
+        'create' => 'services.create',
+        'store' => 'services.store',
+        'show' => 'services.show',
+        'edit' => 'services.edit',
+        'update' => 'services.update',
+        'destroy' => 'services.destroy',
     ]);
 });
 

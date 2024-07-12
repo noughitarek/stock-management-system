@@ -59,7 +59,8 @@ return array(
     array(
         "type" => "link",
         "content" => "Services",
-        "route" => "services",
+        "active_when" => ["App\Http\Controllers\ServiceController#"],
+        "route" => "/services",
         "icon" => array("type" => "lucide", "content" => "Building2"),
     ),
     array("type" => "divider"),
