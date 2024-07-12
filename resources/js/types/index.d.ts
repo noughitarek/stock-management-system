@@ -29,3 +29,14 @@ export interface Rubrique{
     created_by: User;
     updated_by: User;
 }
+export interface Product{
+    id: number;
+    designation: string;
+    rubrique: Rubrique;
+    description: string;
+    pictures: string[];
+    created_at: Date;
+    updated_at: Date;
+    created_by: User;
+    updated_by: User;
+}

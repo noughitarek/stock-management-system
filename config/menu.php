@@ -39,13 +39,14 @@ return array(
         "type" => "link",
         "content" => "Rubriques",
         "active_when" => ["App\Http\Controllers\RubriqueController#"],
-        "route" => "rubriques",
+        "route" => "/rubriques",
         "icon" => array("type" => "lucide", "content" => "Blocks"),
     ),
     array(
         "type" => "link",
         "content" => "Produits",
-        "route" => "products",
+        "active_when" => ["App\Http\Controllers\ProductController#"],
+        "route" => "/products",
         "icon" => array("type" => "lucide", "content" => "Package"),
     ),
     array(

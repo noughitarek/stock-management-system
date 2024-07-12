@@ -7,7 +7,7 @@ import Page from '@/Components/Page';
 import Webmaster from '@/Layouts/Webmaster';
 import { PageProps, Rubrique } from '@/types';
 
-const CreateRubrique: React.FC<PageProps<{ rubrique: Rubrique }>> = ({ auth, rubrique }) => {
+const EditRubrique: React.FC<PageProps<{ rubrique: Rubrique }>> = ({ auth, rubrique }) => {
     const { data, setData, put, processing, errors } = useForm({
         name: rubrique.name || '',
         description: rubrique.description || '',
@@ -55,16 +55,19 @@ const CreateRubrique: React.FC<PageProps<{ rubrique: Rubrique }>> = ({ auth, rub
                     <li className="breadcrumb-item" aria-current="page">
                         <Link href={route('rubriques.index')}>Rubriques</Link>
                     </li>
-                    <li className="breadcrumb-item active" aria-current="page">Create</li>
+                    <li className="breadcrumb-item" aria-current="page">
+                        {rubrique.id}
+                    </li>
+                    <li className="breadcrumb-item active" aria-current="page">Modifier</li>
                 </>
             }>
-                <Page title="Create rubrique" header={
+                <Page title="Modifier une rubrique" header={
                     <Button className="btn btn-primary" disabled={creating} onClick={handleSubmit}>
                         {creating ? 'Enregistrement ...' : 'Enregistrer'}
                     </Button>
                 }>
                     <Grid title="Information de la rubrique">
-                        <form onSubmit={handleSubmit} id="createForm">
+                        <form>
                             <div className="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
                                 <div className="form-label xl:w-64 xl:!mr-10">
                                     <div className="text-left">
@@ -90,7 +93,7 @@ const CreateRubrique: React.FC<PageProps<{ rubrique: Rubrique }>> = ({ auth, rub
                                         <div className="flex items-center">
                                             <div className="font-medium">Description de la rubrique</div>
                                             <div className="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">
-                                                Requis
+                                            Optionnel
                                             </div>
                                         </div>
                                         <div className="leading-relaxed text-slate-500 text-xs mt-3">
@@ -103,7 +106,7 @@ const CreateRubrique: React.FC<PageProps<{ rubrique: Rubrique }>> = ({ auth, rub
                                     <div className="form-help text-right">Caractère maximum 0/255</div>
                                 </div>
                             </div><br />
-                            <Button type="submit" className="btn btn-primary" disabled={creating}>
+                            <Button className="btn btn-primary" disabled={creating} onClick={handleSubmit}>
                                 {creating ? 'Enregistrement ...' : 'Enregistrer'}
                             </Button>
                         </form>
@@ -114,4 +117,4 @@ const CreateRubrique: React.FC<PageProps<{ rubrique: Rubrique }>> = ({ auth, rub
     );
 };
 
-export default CreateRubrique;
+export default EditRubrique;

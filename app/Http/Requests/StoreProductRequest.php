@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::user()->Has_Permissions('create_products');
     }
 
     /**
@@ -22,7 +23,9 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'designation' => 'required|string|max:255',
+            'rubrique' => 'required|exists:rubriques,id|integer',
+            'description' => 'nullable|string',
         ];
     }
 }

@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\DashboardController;
@@ -20,6 +21,15 @@ Route::middleware(['auth'])->group(function () {
         'edit' => 'rubriques.edit',
         'update' => 'rubriques.update',
         'destroy' => 'rubriques.destroy',
+    ]);
+    Route::resource('products', ProductController::class)->names([
+        'index' => 'products.index',
+        'create' => 'products.create',
+        'store' => 'products.store',
+        'show' => 'products.show',
+        'edit' => 'products.edit',
+        'update' => 'products.update',
+        'destroy' => 'products.destroy',
     ]);
 });
 
