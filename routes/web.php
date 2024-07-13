@@ -15,9 +15,9 @@ use App\Http\Controllers\DashboardController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('inbounds', InboundController::class)->names([
+    Route::get('inbounds/rubrique-{rubrique}/create', [InboundController::class, 'create'])->name('inbounds.create');
+    Route::resource('inbounds', InboundController::class)->except(['create'])->names([
         'index' => 'inbounds.index',
-        'create' => 'inbounds.create',
         'store' => 'inbounds.store',
         'show' => 'inbounds.show',
         'edit' => 'inbounds.edit',

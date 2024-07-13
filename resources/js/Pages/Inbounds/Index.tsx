@@ -55,7 +55,7 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                             </div>
                         </div>
                         <div className="w-full sm:w-auto flex">
-                        <Link href={route('inbounds.create')} className="btn btn-primary shadow-md mr-2">Créer une entrée</Link>
+                        <Link href={activeInbound ? route('inbounds.create', {rubrique: activeInbound.rubrique.id}): '#'} className="btn btn-primary shadow-md mr-2">Créer une entrée</Link>
                         </div>
                     </div>
                     <div className="intro-y col-span-12 overflow-auto lg:overflow-visible">

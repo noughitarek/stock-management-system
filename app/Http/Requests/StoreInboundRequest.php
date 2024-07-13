@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreInboundRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreInboundRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::user()->Has_Permissions('create_inbound');
     }
 
     /**
@@ -22,7 +23,10 @@ class StoreInboundRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'commande_note_number' => 'nullable|integer',
+            'delivery_note_number' => 'nullable|integer',
+            'invoice_number' => 'nullable|integer',
+            'supplier' => 'required|integer|exists:suppliers,id',
         ];
     }
 }

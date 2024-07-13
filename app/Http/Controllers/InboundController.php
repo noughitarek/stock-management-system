@@ -52,7 +52,7 @@ class InboundController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Rubrique $rubrique)
     {
         $suppliers = Supplier::with(['createdBy', 'updatedBy', 'deletedBy'])
         ->whereNull('deleted_at')
@@ -63,6 +63,7 @@ class InboundController extends Controller
         $products = Product::with(['createdBy', 'updatedBy', 'deletedBy'])
         ->whereNull('deleted_at')
         ->whereNull('deleted_by')
+        ->where('rubrique', $rubrique->id)
         ->orderBy('id', 'desc')
         ->get()->toArray();
 
