@@ -26,4 +26,12 @@ class Product extends Model
     {
         return $this->belongsTo(Rubrique::class, 'rubrique')->withDefault();
     }
+    public function inboundProducts()
+    {
+        return $this->hasMany(InboundProduct::class, 'product');
+    }
+    public function outboundProducts()
+    {
+        return $this->hasMany(OutboundProduct::class, 'product');
+    }
 }

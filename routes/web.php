@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\InboundController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
@@ -14,6 +15,15 @@ use App\Http\Controllers\DashboardController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::resource('inbounds', InboundController::class)->names([
+        'index' => 'inbounds.index',
+        'create' => 'inbounds.create',
+        'store' => 'inbounds.store',
+        'show' => 'inbounds.show',
+        'edit' => 'inbounds.edit',
+        'update' => 'inbounds.update',
+        'destroy' => 'inbounds.destroy',
+    ]);
     
     Route::resource('rubriques', RubriqueController::class)->names([
         'index' => 'rubriques.index',

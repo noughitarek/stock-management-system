@@ -64,3 +64,30 @@ export interface Service{
     created_by: User;
     updated_by: User;
 }
+
+export interface InboundProducts{
+    id: number;
+    product: Product;
+    unit_price_excl_tax: number;
+    unit_price_net: number;
+    qte: number;
+    total_amount_excl_tax: number;
+    total_amount_net: number;
+}
+export interface Inbound{
+    id: number;
+    commande_note_number: number;
+    delivery_note_number: number;
+    invoice_number: number;
+    supplier: Supplier;
+    inbound_products: InboundProducts[];
+    created_at: Date;
+    updated_at: Date;
+    created_by: User;
+    updated_by: User;
+}
+
+export interface Inbounds{
+    rubrique: Rubrique;
+    inbounds: Inbound[];
+}

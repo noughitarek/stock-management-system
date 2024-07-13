@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rubrique extends Model
+class Inbound extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'created_by', 'updated_by', 'deleted_by', 'deleted_at'];
-    
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -25,5 +23,9 @@ class Rubrique extends Model
     public function inboundProducts()
     {
         return $this->hasMany(InboundProduct::class, 'inbound');
+    }
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier');
     }
 }

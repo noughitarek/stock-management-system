@@ -18,7 +18,8 @@ return array(
     array(
         "type" => "link",
         "content" => "Entrées",
-        "route" => "boxes",
+        "active_when" => ["App\Http\Controllers\InboundController#"],
+        "route" => "/inbounds",
         "icon" => array("type" => "lucide", "content" => "BetweenHorizontalEnd"),
     ),
     array(
