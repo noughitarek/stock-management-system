@@ -118,7 +118,7 @@ const ProductsTable: React.FC<PageProps> = ({ products, searchTerm }) => {
                                         <div className="ml-4">
                                             <div className="flex items-center mt-1">
                                                 <User className="h-4 w-4 text-gray-500 mr-1" />
-                                                <span className="text-gray-500">{product.created_by ? product.created_by.name : 'Unknown'}</span>
+                                                <span className="text-gray-500">{product.created_by.name}</span>
                                             </div>
                                             <div className="flex items-center mt-1">
                                                 <Calendar className="h-4 w-4 text-gray-500 mr-1" />

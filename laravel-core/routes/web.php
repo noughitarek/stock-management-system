@@ -7,6 +7,7 @@ use App\Http\Controllers\InboundController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\OutboundController;
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
@@ -23,6 +24,15 @@ Route::middleware(['auth'])->group(function () {
         'edit' => 'inbounds.edit',
         'update' => 'inbounds.update',
         'destroy' => 'inbounds.destroy',
+    ]);
+    Route::resource('outbounds', OutboundController::class)->names([
+        'index' => 'outbounds.index',
+        'create' => 'outbounds.create',
+        'store' => 'outbounds.store',
+        'show' => 'outbounds.show',
+        'edit' => 'outbounds.edit',
+        'update' => 'outbounds.update',
+        'destroy' => 'outbounds.destroy',
     ]);
     
     Route::resource('rubriques', RubriqueController::class)->names([
@@ -62,7 +72,6 @@ Route::middleware(['auth'])->group(function () {
         'destroy' => 'services.destroy',
     ]);
 });
-
 
 /*
 Route::get('/', function () {
