@@ -2,8 +2,10 @@ import React, { ReactNode, useState, useEffect } from 'react';
 import { Rubrique } from '@/types';
 import Pagination from './Pagination';
 import { Blocks, Calendar, CheckSquare, Hash, Trash2, User } from 'lucide-react';
-import { Link } from '@inertiajs/react';
+import { Link, useForm, router } from '@inertiajs/react';
 import { Button } from '@headlessui/react';
+import DeleteModal from './DeleteModal';
+import { toast } from 'react-toastify';
 
 interface PageProps {
     rubriques: Rubrique[];
@@ -11,7 +13,11 @@ interface PageProps {
 }
 
 const RubriquesTable: React.FC<PageProps> = ({ rubriques, searchTerm }) => {
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const { data, setData, delete: deleteEntry } = useForm<{ rubrique: number }>({ rubrique: 0 });
     const [shownRubriques, setShownRubriques] = useState(rubriques)
+
     useEffect(() => {
         if (searchTerm) {
           const filteredRubriques = rubriques.filter(
@@ -25,6 +31,34 @@ const RubriquesTable: React.FC<PageProps> = ({ rubriques, searchTerm }) => {
           setShownRubriques(rubriques);
         }
       }, [rubriques, searchTerm]);
+      
+    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>, rubriqueID: number) => {
+        event.preventDefault();
+        setData({ rubrique: rubriqueID });
+        setShowDeleteModal(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setDeleting(true);
+
+        deleteEntry(route('rubriques.destroy', {rubrique: data.rubrique}), {
+            data: {rubrique: data.rubrique},
+            onSuccess: () => {
+                toast.success('Rubrique supprimée avec succès');
+                router.get(route('rubriques.index'));
+            },
+            onError: (error) => {
+                toast.error('Erreur lors de la suppression de la rubrique');
+                setDeleting(false);
+                console.error('Error:', error);
+            },
+        });
+        setShowDeleteModal(false);
+    };
+
+    const handleDeleteCancel = () => {
+        setShowDeleteModal(false);
+    };
     return (<>
         <div className="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
             <table className="table table-report -mt-2">
@@ -88,10 +122,10 @@ const RubriquesTable: React.FC<PageProps> = ({ rubriques, searchTerm }) => {
                                 <td className="table-report__action w-56">
                                     <div className="flex justify-center items-center">
                                         <Link className="flex items-center mr-3" href={route('rubriques.edit', { rubrique: rubrique.id })}>
-                                            <CheckSquare className="w-4 h-4 mr-1"/> Edit
+                                            <CheckSquare className="w-4 h-4 mr-1"/> Modifier
                                         </Link>
-                                        <Button className="flex items-center text-danger">
-                                            <Trash2 className="w-4 h-4 mr-1" /> Delete
+                                        <Button className="flex items-center text-danger" onClick={(event) => handleDeleteClick(event, rubrique.id)}>
+                                            <Trash2 className="w-4 h-4 mr-1" /> Supprimer
                                         </Button>
                                     </div>
                                 </td>
@@ -100,6 +134,7 @@ const RubriquesTable: React.FC<PageProps> = ({ rubriques, searchTerm }) => {
                     }
                 </tbody>
             </table>
+            <DeleteModal showDeleteModal={showDeleteModal} handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} deleting={deleting}/>
         </div>
     </>
 

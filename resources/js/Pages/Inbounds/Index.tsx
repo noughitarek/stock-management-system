@@ -1,19 +1,54 @@
 
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import { PageProps, Inbounds, Rubrique } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import Page from '@/Components/Page';
 import Webmaster from '@/Layouts/Webmaster';
-import { Blocks, Bookmark, Calendar, ChevronDown, ChevronLeft, ChevronRight, Contact, Hash, MoreHorizontal, RefreshCw, Search, Settings, Star } from 'lucide-react';
+import { Blocks, Bookmark, Calendar, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, Contact, Hash, MoreHorizontal, RefreshCw, Search, Settings, Star, Trash2 } from 'lucide-react';
 import PaginationInfo from '@/Components/PaginationInfo';
 import { Button } from '@headlessui/react';
+import Modal from '@/Components/Modal';
+import { toast } from 'react-toastify';
+import DeleteModal from '@/Components/DeleteModal';
 
 const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:number, total:number }>> = ({ auth, inbounds, from, to, total }) => {
-    const [activeInbound, setActiveInbound] = useState(inbounds.length > 0 ? inbounds[0] : null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const { data, setData, delete: deleteEntry } = useForm<{ inbound: number }>({ inbound: 0 });
+
+    const [activeInbound, setActiveInbound] = useState<Inbounds | null>(inbounds.length > 0 ? inbounds[0] : null);
     const handleRubriqueChange = (rubrique: Rubrique) => {
         const filteredInbounds = inbounds.filter(inbound => inbound.rubrique === rubrique);
         setActiveInbound(filteredInbounds.length > 0 ? filteredInbounds[0] : null);
     }
+
+    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>, inboundID: number) => {
+        event.preventDefault();
+        setData({ inbound: inboundID });
+        setShowDeleteModal(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setDeleting(true);
+
+        deleteEntry(route('inbounds.destroy', {inbound: data.inbound}), {
+            data: {inbound: data.inbound},
+            onSuccess: () => {
+                toast.success('Entrée Supprimé avec succès');
+                router.get(route('inbounds.index'));
+            },
+            onError: (error) => {
+                toast.error('Erreur lors de la suppression de l\'entrée');
+                setDeleting(false);
+                console.error('Error:', error);
+            },
+        });
+        setShowDeleteModal(false);
+    };
+
+    const handleDeleteCancel = () => {
+        setShowDeleteModal(false);
+    };
 
     return (<>
         <Head title="Entrées" />
@@ -29,18 +64,17 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                     <div className="intro-y box bg-primary p-5 mt-6">
                         <div className="dark:border-darkmode-400 text-white">
                             {inbounds.map(inbound=>{
-                                if(activeInbound && inbound.rubrique == activeInbound.rubrique)
-                                {
-                                    return(<Button className="flex items-center px-3 py-2 rounded-md bg-white/10 dark:bg-darkmode-700 font-medium mt-2" >
-                                        <Blocks className='w-4 h-4 mr-2'/> {inbound.rubrique.name}
-                                    </Button>)
-                                }
-                                else
-                                {
-                                    return(<Button onClick={()=>handleRubriqueChange(inbound.rubrique)} className="flex items-center px-3 py-2 mt-2 rounded-md" >
-                                        <Blocks className='w-4 h-4 mr-2'/> {inbound.rubrique.name}
-                                    </Button>)
-                                }
+                                const isActive = activeInbound && inbound.rubrique === activeInbound.rubrique;
+                                return (
+                                    <Button
+                                        key={inbound.rubrique.name}
+                                        onClick={() => handleRubriqueChange(inbound.rubrique)}
+                                        className={`flex items-center px-3 py-2 rounded-md mt-2 ${isActive ? 'bg-white/10 dark:bg-darkmode-700 font-medium' : ''}`}
+                                    >
+                                        <Blocks className='w-4 h-4 mr-2' />
+                                        {inbound.rubrique.name}
+                                    </Button>
+                                );
                             })}
                         </div>
                     </div>
@@ -69,6 +103,7 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                     <th className="whitespace-nowrap">Montant HT</th>
                                     <th className="whitespace-nowrap">Prix UN/TTC</th>
                                     <th className="whitespace-nowrap">Montant TTC</th>
+                                    <th className="whitespace-nowrap">Docs</th>
                                     <th className="whitespace-nowrap">Action</th>
                                 </tr>
                             </thead>
@@ -101,8 +136,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                     <td>
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
-                                                <div className="flex flex-col space-y-1">
-                                                    <span className='font-medium whitespace-nowrap' key={productIndex}>
+                                                <div className="flex flex-col space-y-1" key={productIndex}>
+                                                    <span className='font-medium whitespace-nowrap'>
                                                         {product.product.designation}
                                                     </span>
                                                  </div>
@@ -112,8 +147,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                     <td>
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
-                                                <div className="flex flex-col space-y-1">
-                                                    <span className='font-medium whitespace-nowrap' key={productIndex}>
+                                                <div className="flex flex-col space-y-1" key={productIndex}>
+                                                    <span className='font-medium whitespace-nowrap'>
                                                         {product.qte}
                                                     </span>
                                                  </div>
@@ -123,8 +158,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                     <td>
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
-                                                <div className="flex flex-col space-y-1">
-                                                    <span className='font-medium whitespace-nowrap' key={productIndex}>
+                                                <div className="flex flex-col space-y-1" key={productIndex}>
+                                                    <span className='font-medium whitespace-nowrap'>
                                                         <b>{product.unit_price_excl_tax}</b> DZD
                                                     </span>
                                                  </div>
@@ -134,8 +169,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                     <td>
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
-                                                <div className="flex flex-col space-y-1">
-                                                    <span className='font-medium whitespace-nowrap' key={productIndex}>
+                                                <div className="flex flex-col space-y-1" key={productIndex}>
+                                                    <span className='font-medium whitespace-nowrap'>
                                                         <b>{product.total_amount_excl_tax}</b> DZD
                                                     </span>
                                                  </div>
@@ -145,8 +180,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                     <td>
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
-                                                <div className="flex flex-col space-y-1">
-                                                    <span className='font-medium whitespace-nowrap' key={productIndex}>
+                                                <div className="flex flex-col space-y-1" key={productIndex}>
+                                                    <span className='font-medium whitespace-nowrap'>
                                                         <b>{product.unit_price_net}</b> DZD
                                                     </span>
                                                  </div>
@@ -156,8 +191,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                     <td>
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
-                                                <div className="flex flex-col space-y-1">
-                                                    <span className='font-medium whitespace-nowrap' key={productIndex}>
+                                                <div className="flex flex-col space-y-1" key={productIndex}>
+                                                    <span className='font-medium whitespace-nowrap'>
                                                         <b>{product.total_amount_net}</b> DZD
                                                     </span>
                                                  </div>
@@ -176,11 +211,23 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                             </Link>
                                          </div>
                                     </td>
+                                    <td className="table-report__action w-56">
+                                        <div className="flex justify-center items-center">
+                                            <Link className="flex items-center mr-3" href={route('inbounds.edit', { inbound: inbound.id })}>
+                                                <CheckSquare className="w-4 h-4 mr-1"/> Modifier
+                                            </Link>
+                                            <Button className="flex items-center text-danger" onClick={(event) => handleDeleteClick(event, inbound.id)}>
+                                                <Trash2 className="w-4 h-4 mr-1" /> Supprimer
+                                            </Button>
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                         </table>
                     </div>
+                    <DeleteModal showDeleteModal={showDeleteModal} handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} deleting={deleting}/>
+
                     <div className="p-5 flex flex-col sm:flex-row items-center text-center sm:text-left text-slate-500">
                         <div>4.41 GB (25%) of 17 GB used Manage</div>
                         <div className="sm:ml-auto mt-2 sm:mt-0">

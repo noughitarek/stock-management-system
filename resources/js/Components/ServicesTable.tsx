@@ -2,8 +2,10 @@ import React, { ReactNode, useState, useEffect } from 'react';
 import { Service } from '@/types';
 import Pagination from './Pagination';
 import { Blocks, BookUser, Calendar, CheckSquare, Hash, Phone, Trash2, User } from 'lucide-react';
-import { Link } from '@inertiajs/react';
+import { Link, router, useForm } from '@inertiajs/react';
 import { Button } from '@headlessui/react';
+import DeleteModal from './DeleteModal';
+import { toast } from 'react-toastify';
 
 interface PageProps {
     services: Service[];
@@ -11,6 +13,10 @@ interface PageProps {
 }
 
 const ServicesTable: React.FC<PageProps> = ({ services, searchTerm }) => {
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const { data, setData, delete: deleteEntry } = useForm<{ service: number }>({ service: 0 });
+
     const [shownServices, setShownServices] = useState(services)
     useEffect(() => {
         if (searchTerm) {
@@ -27,6 +33,33 @@ const ServicesTable: React.FC<PageProps> = ({ services, searchTerm }) => {
             setShownServices(services);
         }
       }, [services, searchTerm]);
+    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>, serviceID: number) => {
+        event.preventDefault();
+        setData({ service: serviceID });
+        setShowDeleteModal(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setDeleting(true);
+
+        deleteEntry(route('services.destroy', {service: data.service}), {
+            data: {service: data.service},
+            onSuccess: () => {
+                toast.success('Service supprimé avec succès');
+                router.get(route('services.index'));
+            },
+            onError: (error) => {
+                toast.error('Erreur lors de la suppression du service');
+                setDeleting(false);
+                console.error('Error:', error);
+            },
+        });
+        setShowDeleteModal(false);
+    };
+
+    const handleDeleteCancel = () => {
+        setShowDeleteModal(false);
+    };
     return (<>
         <div className="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
             <table className="table table-report -mt-2">
@@ -104,11 +137,11 @@ const ServicesTable: React.FC<PageProps> = ({ services, searchTerm }) => {
                                 </td>
                                 <td className="table-report__action w-56">
                                     <div className="flex justify-center items-center">
-                                        <Link className="flex items-center mr-3" href={route('services.edit', { service: service.id })}>
-                                            <CheckSquare className="w-4 h-4 mr-1"/> Edit
+                                        <Link className="flex items-center mr-3" href={route('rubriques.edit', { rubrique: service.id })}>
+                                            <CheckSquare className="w-4 h-4 mr-1"/> Modifier
                                         </Link>
-                                        <Button className="flex items-center text-danger">
-                                            <Trash2 className="w-4 h-4 mr-1" /> Delete
+                                        <Button className="flex items-center text-danger" onClick={(event) => handleDeleteClick(event, service.id)}>
+                                            <Trash2 className="w-4 h-4 mr-1" /> Supprimer
                                         </Button>
                                     </div>
                                 </td>
@@ -117,6 +150,7 @@ const ServicesTable: React.FC<PageProps> = ({ services, searchTerm }) => {
                     }
                 </tbody>
             </table>
+            <DeleteModal showDeleteModal={showDeleteModal} handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} deleting={deleting}/>
         </div>
     </>
 

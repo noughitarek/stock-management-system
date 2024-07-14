@@ -2,8 +2,10 @@ import React, { ReactNode, useState, useEffect } from 'react';
 import { Supplier } from '@/types';
 import Pagination from './Pagination';
 import { Blocks, Calendar, CheckSquare, Hash, MapPin, Phone, Trash2, User } from 'lucide-react';
-import { Link } from '@inertiajs/react';
+import { Link, router, useForm } from '@inertiajs/react';
 import { Button } from '@headlessui/react';
+import DeleteModal from './DeleteModal';
+import { toast } from 'react-toastify';
 
 interface PageProps {
     suppliers: Supplier[];
@@ -11,6 +13,10 @@ interface PageProps {
 }
 
 const SuppliersTable: React.FC<PageProps> = ({ suppliers, searchTerm }) => {
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const { data, setData, delete: deleteEntry } = useForm<{ supplier: number }>({ supplier: 0 });
+
     const [shownSuppliers, setShownSuppliers] = useState(suppliers)
     useEffect(() => {
         if (searchTerm) {
@@ -25,6 +31,33 @@ const SuppliersTable: React.FC<PageProps> = ({ suppliers, searchTerm }) => {
           setShownSuppliers(suppliers);
         }
       }, [suppliers, searchTerm]);
+      const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>, supplierID: number) => {
+        event.preventDefault();
+        setData({ supplier: supplierID });
+        setShowDeleteModal(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setDeleting(true);
+
+        deleteEntry(route('suppliers.destroy', {supplier: data.supplier}), {
+            data: {supplier: data.supplier},
+            onSuccess: () => {
+                toast.success('Fournisseur supprimé avec succès');
+                router.get(route('suppliers.index'));
+            },
+            onError: (error) => {
+                toast.error('Erreur lors de la suppression du fournisseur');
+                setDeleting(false);
+                console.error('Error:', error);
+            },
+        });
+        setShowDeleteModal(false);
+    };
+
+    const handleDeleteCancel = () => {
+        setShowDeleteModal(false);
+    };
     return (<>
         <div className="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
             <table className="table table-report -mt-2">
@@ -103,10 +136,10 @@ const SuppliersTable: React.FC<PageProps> = ({ suppliers, searchTerm }) => {
                                 <td className="table-report__action w-56">
                                     <div className="flex justify-center items-center">
                                         <Link className="flex items-center mr-3" href={route('suppliers.edit', { supplier: supplier.id })}>
-                                            <CheckSquare className="w-4 h-4 mr-1"/> Edit
+                                            <CheckSquare className="w-4 h-4 mr-1"/> Modifier
                                         </Link>
-                                        <Button className="flex items-center text-danger">
-                                            <Trash2 className="w-4 h-4 mr-1" /> Delete
+                                        <Button className="flex items-center text-danger" onClick={(event) => handleDeleteClick(event, supplier.id)}>
+                                            <Trash2 className="w-4 h-4 mr-1" /> Supprimer
                                         </Button>
                                     </div>
                                 </td>
@@ -115,6 +148,7 @@ const SuppliersTable: React.FC<PageProps> = ({ suppliers, searchTerm }) => {
                     }
                 </tbody>
             </table>
+            <DeleteModal showDeleteModal={showDeleteModal} handleDeleteCancel={handleDeleteCancel} handleDeleteConfirm={handleDeleteConfirm} deleting={deleting}/>
         </div>
     </>
 

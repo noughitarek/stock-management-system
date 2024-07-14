@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('inbounds', function (Blueprint $table) {
             $table->id();
             
+            $table->foreignId('rubrique')->constrained('rubriques');
+            
             $table->integer('commande_note_number')->index()->nullable();
             $table->integer('delivery_note_number')->index()->nullable();
             $table->integer('invoice_number')->index()->nullable();

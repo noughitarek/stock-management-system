@@ -23,6 +23,7 @@ class StoreInboundRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'rubrique' => 'required|integer|exists:rubriques,id',
             'commande_note_number' => 'nullable|integer',
             'delivery_note_number' => 'nullable|integer',
             'invoice_number' => 'nullable|integer',

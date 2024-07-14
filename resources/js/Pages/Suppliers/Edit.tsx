@@ -8,7 +8,7 @@ import Webmaster from '@/Layouts/Webmaster';
 import { PageProps, Supplier } from '@/types';
 
 const EditSupplier: React.FC<PageProps<{ supplier: Supplier }>> = ({ auth, supplier }) => {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put } = useForm({
         name: supplier.name || '',
         phone: supplier.phone || '',
         address: supplier.address || '',
@@ -89,7 +89,7 @@ const EditSupplier: React.FC<PageProps<{ supplier: Supplier }>> = ({ auth, suppl
                                     </div>
                                 </div>
                                 <div className="w-full mt-3 xl:mt-0 flex-1">
-                                    <input onChange={handleChange} id="name" name="name" type="text" className="form-control" value={supplier.name} placeholder="Nom de supplier"/>
+                                    <input onChange={handleChange} id="name" name="name" type="text" className="form-control" value={data.name} placeholder="Nom de supplier"/>
                                     <div className="form-help text-right">Caractère maximum 0/70</div>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@ const EditSupplier: React.FC<PageProps<{ supplier: Supplier }>> = ({ auth, suppl
                                     </div>
                                 </div>
                                 <div className="w-full mt-3 xl:mt-0 flex-1">
-                                    <input onChange={handleChange} id="phone" name="phone" type="text" className="form-control" value={supplier.phone} placeholder="Téléphone du fournisseur"/>
+                                    <input onChange={handleChange} id="phone" name="phone" type="text" className="form-control" value={data.phone} placeholder="Téléphone du fournisseur"/>
                                     <div className="form-help text-right">Caractère maximum 0/70</div>
                                 </div>
                             </div>
@@ -131,7 +131,7 @@ const EditSupplier: React.FC<PageProps<{ supplier: Supplier }>> = ({ auth, suppl
                                     </div>
                                 </div>
                                 <div className="w-full mt-3 xl:mt-0 flex-1">
-                                    <input onChange={handleChange} id="address" name="address" type="text" className="form-control" value={supplier.address} placeholder="Adresse du fournisseur"/>
+                                    <input onChange={handleChange} id="address" name="address" type="text" className="form-control" value={data.address} placeholder="Adresse du fournisseur"/>
                                     <div className="form-help text-right">Caractère maximum 0/70</div>
                                 </div>
                             </div>
@@ -152,7 +152,7 @@ const EditSupplier: React.FC<PageProps<{ supplier: Supplier }>> = ({ auth, suppl
                                     </div>
                                 </div>
                                 <div className="w-full mt-3 xl:mt-0 flex-1">
-                                    <textarea onChange={handleChange} id="description" name="description" className="form-control" value={supplier.description} placeholder="Description du fournisseur"/>
+                                    <textarea onChange={handleChange} id="description" name="description" className="form-control" value={data.description} placeholder="Description du fournisseur"/>
                                     <div className="form-help text-right">Caractère maximum 0/255</div>
                                 </div>
                             </div><br/>

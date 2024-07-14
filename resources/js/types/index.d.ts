@@ -76,6 +76,7 @@ export interface InboundProducts{
 }
 export interface Inbound{
     id: number;
+    rubrique: Rubrique;
     commande_note_number: number;
     delivery_note_number: number;
     invoice_number: number;

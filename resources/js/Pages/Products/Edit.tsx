@@ -8,7 +8,7 @@ import Webmaster from '@/Layouts/Webmaster';
 import { PageProps, Product, Rubrique } from '@/types';
 
 const EditProduct: React.FC<PageProps<{ product: Product, rubriques: Rubrique[] }>> = ({ auth, product, rubriques }) => {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put } = useForm({
         designation: product.designation || '',
         rubrique: product.rubrique.id || 0,
         description: product.description || '',
@@ -87,7 +87,7 @@ const EditProduct: React.FC<PageProps<{ product: Product, rubriques: Rubrique[] 
                                     </div>
                                 </div>
                                 <div className="w-full mt-3 xl:mt-0 flex-1">
-                                    <input onChange={handleChange} id="designation" name="designation" type="text" className="form-control" placeholder="Nom du produit" value={product.designation}/>
+                                    <input onChange={handleChange} id="designation" name="designation" type="text" className="form-control" placeholder="Nom du produit" value={data.designation}/>
                                     <div className="form-help text-right">Caractère maximum 0/70</div>
                                 </div>
                             </div>
@@ -108,10 +108,10 @@ const EditProduct: React.FC<PageProps<{ product: Product, rubriques: Rubrique[] 
                                     </div>
                                 </div>
                                 <div className="w-full mt-3 xl:mt-0 flex-1">
-                                    <select onChange={handleChange} id="rubrique" name="rubrique" className="form-control">
+                                    <select defaultValue={data.rubrique} onChange={handleChange} id="rubrique" name="rubrique" className="form-control">
                                         <option>Sélectioner la rubrique</option>
                                         {rubriques.map(rubrique=>{
-                                            return (<option selected={product.rubrique.id == rubrique.id ? true : undefined} key={rubrique.id} value={rubrique.id}>{rubrique.name}</option>)
+                                            return (<option key={rubrique.id} value={rubrique.id}>{rubrique.name}</option>)
                                         })}
                                     </select>
                                     <div className="form-help text-right">Caractère maximum 0/70</div>
@@ -134,7 +134,7 @@ const EditProduct: React.FC<PageProps<{ product: Product, rubriques: Rubrique[] 
                                     </div>
                                 </div>
                                 <div className="w-full mt-3 xl:mt-0 flex-1">
-                                    <textarea onChange={handleChange} id="description" name="description" className="form-control" placeholder="Description du produit" value={product.description}/>
+                                    <textarea onChange={handleChange} id="description" name="description" className="form-control" placeholder="Description du produit" value={data.description}/>
                                     <div className="form-help text-right">Caractère maximum 0/255</div>
                                 </div>
                             </div><br/>

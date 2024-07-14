@@ -18,17 +18,16 @@ interface FormData {
     products: InboundProducts[];
 }
 
-const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Supplier[], rubrique: Rubrique }>> = ({ auth, products, rubrique, suppliers }) => {
-    const { data, setData, post } = useForm<FormData>({
-        rubrique: rubrique.id,
-        supplier: 0,
-        commande_note_number: null,
-        delivery_note_number: null,
-        invoice_number: null,
-        products: [],
+const EditInbound: React.FC<PageProps<{ products: Product[], suppliers: Supplier[], inbound: Inbound }>> = ({ auth, products, inbound, suppliers }) => {
+    const { data, setData, put } = useForm<FormData>('rememberKey', {
+        rubrique: inbound.rubrique.id,
+        supplier: inbound.supplier.id,
+        commande_note_number: inbound.commande_note_number ?? null,
+        delivery_note_number: inbound.delivery_note_number ?? null,
+        invoice_number: inbound.invoice_number ?? null,
+        products: inbound.inbound_products,
     });
-
-    const [creating, setCreating] = useState(false)
+    const [editing, setEditing] = useState(false)
     
     useEffect(() => {
         if(products.length == 0)
@@ -41,26 +40,14 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
         {
             setData(prevData => ({
                 ...prevData,
-                products: [{
-                        id: 1,
-                        product: products[0],
-                        unit_price_excl_tax: 0,
-                        unit_price_net: 0,
-                        qte: 0,
-                        total_amount_excl_tax: 0,
-                        total_amount_net: 0,
-                    }]
+                products: inbound.inbound_products
             }));
         }
     }, []);
 
     const handleSubmit = () => {
-        if (!data.supplier || data.products.length==0) {
-            toast.error('Veuillez remplir tous les champs requis.', { className: 'error-toast' });
-            return;
-        }
-        setCreating(true);
-        post(route('inbounds.store'), {
+        setEditing(true);
+        put(route('inbounds.update', {inbound: inbound.id}), {
             data: {
                 rubrique: data.rubrique,
                 supplier: data.supplier,
@@ -77,17 +64,17 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                 })),
             },
             onSuccess: () => {
-                toast.success('Entrée créée avec succès');
-                setCreating(false);
+                toast.success('Entrée modifiée avec succès');
+                setEditing(false);
                 router.get(route('inbounds.index'));
             },
             onError: (error) => {
-                toast.error('Erreur lors de la création de l\'entrée');
+                toast.error('Erreur lors de la modification de l\'entrée');
                 console.error('Error:', error);
-                setCreating(false);
+                setEditing(false);
             },
         });
-        setCreating(false);
+        setEditing(false);
     }
 
     const addProduct = () => {
@@ -119,45 +106,46 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> ,index?: number, fieldName?: keyof InboundProducts) => {
         const { name, value } = e.target;
 
-    if(index !== undefined && fieldName){
-        setData(prevData => {
-            const updatedProducts = prevData.products ? [...prevData.products] : [];
-            if(updatedProducts[index]){
-                let updatedProduct = {
-                    ...updatedProducts[index],
-                    [fieldName]: value
-                };
-                if (fieldName === "unit_price_excl_tax" || fieldName === "qte") {
-                    const unit_price_excl_tax = parseFloat(updatedProduct.unit_price_excl_tax.toString());
-                    const qte = parseFloat(updatedProduct.qte.toString());
-
-                    updatedProduct = {
-                        ...updatedProduct,
-                        unit_price_net: unit_price_excl_tax + unit_price_excl_tax*0.19,
-                        total_amount_excl_tax: unit_price_excl_tax*qte,
-                        total_amount_net: unit_price_excl_tax*qte*0.19 + unit_price_excl_tax*qte,
+        if(index !== undefined && fieldName){
+            setData(prevData => {
+                const updatedProducts = prevData.products ? [...prevData.products] : [];
+                if(updatedProducts[index]){
+                    let updatedProduct = {
+                        ...updatedProducts[index],
+                        [fieldName]: value
                     };
+                    if (fieldName === "unit_price_excl_tax" || fieldName === "qte") {
+                        const unit_price_excl_tax = parseFloat(updatedProduct.unit_price_excl_tax.toString());
+                        const qte = parseFloat(updatedProduct.qte.toString());
+
+                        updatedProduct = {
+                            ...updatedProduct,
+                            unit_price_net: unit_price_excl_tax + unit_price_excl_tax*0.19,
+                            total_amount_excl_tax: unit_price_excl_tax*qte,
+                            total_amount_net: unit_price_excl_tax*qte*0.19 + unit_price_excl_tax*qte,
+                        };
+                    }
+
+                    updatedProducts[index] = updatedProduct;
                 }
 
-                updatedProducts[index] = updatedProduct;
-            }
-
-            return { ...prevData, products: updatedProducts };
-        });
-    }else{
-        setData(prevData => ({
-            ...prevData,
-            [name]: value
-        }));
-    }
-};
+                return { ...prevData, products: updatedProducts };
+            });
+        }else{
+            setData(prevData => ({
+                ...prevData,
+                [name]: value
+            }));
+        }
+    };
 
     return (<>
-        <Head title="Créer une entrée" />
+        <Head title="Modifier une entrée" />
         <Webmaster user={auth.user} menu={auth.menu}
             breadcrumb={<>
                 <li className="breadcrumb-item" aria-current="page"><Link href={route('inbounds.index')}>Entrées</Link></li>
-                <li className="breadcrumb-item active" aria-current="page">Créer</li></>}>
+                <li className="breadcrumb-item" aria-current="page">{inbound.id}</li>
+                <li className="breadcrumb-item active" aria-current="page">Modifier</li></>}>
             <Page title="Créer une entrée" header={<></>}>
                 <Grid title="Information de l'entrée">
                     <div className="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
@@ -177,7 +165,7 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                             </div>
                         </div>
                         <div className="w-full mt-3 xl:mt-0 flex-1">
-                            <select id="supplier" name="supplier" className="form-control" onChange={handleChange}>
+                            <select defaultValue={data.supplier} id="supplier" name="supplier" className="form-control" onChange={handleChange}>
                                 <option>Sélectioner le fournisseur</option>
                                 {suppliers.map(supplier=>{
                                     return (<option key={supplier.id} value={supplier.id}>{supplier.name}</option>)
@@ -203,7 +191,7 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                             </div>
                         </div>
                         <div className="w-full mt-3 xl:mt-0 flex-1">
-                            <input id="commande_note_number" name="commande_note_number" type="text" className="form-control" placeholder="Numéro de bon de commande" onChange={handleChange}/>
+                            <input id="commande_note_number" name="commande_note_number" value={data.commande_note_number !== null ? String(data.commande_note_number) : ''} type="text" className="form-control" placeholder="Numéro de bon de commande" onChange={handleChange}/>
                             <div className="form-help text-right">Caractère maximum 0/70</div>
                         </div>
                     </div>
@@ -224,7 +212,7 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                             </div>
                         </div>
                         <div className="w-full mt-3 xl:mt-0 flex-1">
-                            <input id="delivery_note_number" name="delivery_note_number" type="text" className="form-control" placeholder="Numéro de bon de livraison" onChange={handleChange}/>
+                            <input id="delivery_note_number" name="delivery_note_number" type="text" value={data.delivery_note_number !== null ? String(data.delivery_note_number): ""} className="form-control" placeholder="Numéro de bon de livraison" onChange={handleChange}/>
                             <div className="form-help text-right">Caractère maximum 0/70</div>
                         </div>
                     </div>
@@ -245,7 +233,7 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                             </div>
                         </div>
                         <div className="w-full mt-3 xl:mt-0 flex-1">
-                            <input id="invoice_number" name="invoice_number" type="text" className="form-control" placeholder="Numéro de la facture" onChange={handleChange}/>
+                            <input id="invoice_number" name="invoice_number" type="text" className="form-control" value={data.invoice_number!==null?String(data.invoice_number):""} placeholder="Numéro de la facture" onChange={handleChange}/>
                             <div className="form-help text-right">Caractère maximum 0/70</div>
                         </div>
                     </div>
@@ -270,14 +258,14 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                                             id={`product-${index}`}
                                             name={`product-${index}`}
                                             className="form-control"
-                                            value={product.product.id}
+                                            defaultValue={product.product.id}
                                         >
                                             <option value='0'>Sélectioner le produit</option>
                                             {products.map(prod => (
                                                 <option key={prod.id} value={prod.id}>{prod.designation}</option>
                                             ))}
                                         </select>
-                                        <div className="form-help text-right">Rubrique: {rubrique.name}</div>
+                                        <div className="form-help text-right">Rubrique: {product.product.rubrique.id}</div>
                                     </div>
                                     <div className="w-full mt-3 xl:mt-0 flex-1 mr-2">
                                         <input
@@ -344,8 +332,8 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                             ))}
                         </>
                     </Grid><br/>
-                    <Button className="btn btn-primary" disabled={creating} onClick={handleSubmit}>
-                        {creating ? 'Enregistrement ...' : 'Enregistrer'}
+                    <Button className="btn btn-primary" disabled={editing} onClick={handleSubmit}>
+                        {editing ? 'Enregistrement ...' : 'Enregistrer'}
                     </Button>
                 </Page>
             </Webmaster>
@@ -353,4 +341,4 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
     );
 };
 
-export default CreateInbound;
+export default EditInbound;

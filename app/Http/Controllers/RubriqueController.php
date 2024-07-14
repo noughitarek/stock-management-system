@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Product;
 use App\Models\Rubrique;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreRubriqueRequest;
@@ -94,6 +95,10 @@ class RubriqueController extends Controller
     public function destroy(Rubrique $rubrique)
     {
         $rubrique->update([
+            'deleted_by' => Auth::user()->id,
+            'deleted_at' => now(),
+        ]);
+        Product::where('rubrique', $rubrique->id)->update([
             'deleted_by' => Auth::user()->id,
             'deleted_at' => now(),
         ]);

@@ -89,7 +89,7 @@ const EditService: React.FC<PageProps<{ service: Service }>> = ({ auth, service 
                                 </div>
                             </div>
                             <div className="w-full mt-3 xl:mt-0 flex-1">
-                                <input onChange={handleChange} id="name" name="name" type="text" className="form-control" placeholder="Nom du service" value={service.name}/>
+                                <input onChange={handleChange} id="name" name="name" type="text" className="form-control" placeholder="Nom du service" value={data.name}/>
                                 <div className="form-help text-right">Caractère maximum 0/70</div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@ const EditService: React.FC<PageProps<{ service: Service }>> = ({ auth, service 
                                 </div>
                             </div>
                             <div className="w-full mt-3 xl:mt-0 flex-1">
-                                <input onChange={handleChange} id="responsible_name" name="responsible_name" type="text" className="form-control" placeholder="Nom du responsable" value={service.responsible_name}/>
+                                <input onChange={handleChange} id="responsible_name" name="responsible_name" type="text" className="form-control" placeholder="Nom du responsable" value={data.responsible_name}/>
                                 <div className="form-help text-right">Caractère maximum 0/70</div>
                             </div>
                         </div>
@@ -131,7 +131,7 @@ const EditService: React.FC<PageProps<{ service: Service }>> = ({ auth, service 
                                 </div>
                             </div>
                             <div className="w-full mt-3 xl:mt-0 flex-1">
-                                <input onChange={handleChange} id="responsible_phone" name="responsible_phone" type="text" className="form-control" placeholder="Téléphone du responsable" value={service.responsible_phone}/>
+                                <input onChange={handleChange} id="responsible_phone" name="responsible_phone" type="text" className="form-control" placeholder="Téléphone du responsable" value={data.responsible_phone}/>
                                 <div className="form-help text-right">Caractère maximum 0/70</div>
                             </div>
                         </div>
@@ -152,7 +152,7 @@ const EditService: React.FC<PageProps<{ service: Service }>> = ({ auth, service 
                                 </div>
                             </div>
                             <div className="w-full mt-3 xl:mt-0 flex-1">
-                                <textarea onChange={handleChange} id="description" name="description" className="form-control" placeholder="Description du service" value={service.description}/>
+                                <textarea onChange={handleChange} id="description" name="description" className="form-control" placeholder="Description du service" value={data.description}/>
                                 <div className="form-help text-right">Caractère maximum 0/255</div>
                             </div>
                         </div><br/>
