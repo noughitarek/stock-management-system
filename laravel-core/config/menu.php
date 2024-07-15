@@ -12,7 +12,8 @@ return array(
     array(
         "type" => "link",
         "content" => "Stock",
-        "route" => "stock",
+        "active_when" => ["App\Http\Controllers\StockController#"],
+        "route" => "/stock",
         "icon" => array("type" => "lucide", "content" => "Boxes"),
     ),
     array(
@@ -25,7 +26,8 @@ return array(
     array(
         "type" => "link",
         "content" => "Sorties",
-        "route" => "boxes",
+        "active_when" => ["App\Http\Controllers\OutboundController#"],
+        "route" => "/outbounds",
         "icon" => array("type" => "lucide", "content" => "LogOut"),
     ),
     array(

@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\InboundController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\DashboardController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('stock', [StockController::class, 'index'])->name('stock.index');
     Route::get('inbounds/rubrique-{rubrique}/create', [InboundController::class, 'create'])->name('inbounds.create');
     Route::resource('inbounds', InboundController::class)->except(['create'])->names([
         'index' => 'inbounds.index',

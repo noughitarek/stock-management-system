@@ -146,7 +146,7 @@ class InboundController extends Controller
             'delivery_note_number' => $request->input('delivery_note_number'),
             'invoice_number' => $request->input('invoice_number'),
             'supplier' => $request->input('supplier'),
-            'created_by' => Auth::user()->id
+            'updated_by' => Auth::user()->id
         ]);
         InboundProduct::where('inbound', $inbound->id)->delete();
         foreach($request->products as $product)

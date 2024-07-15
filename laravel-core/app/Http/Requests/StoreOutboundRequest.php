@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreOutboundRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreOutboundRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::user()->Has_Permissions('create_outbound');
     }
 
     /**
@@ -22,7 +23,8 @@ class StoreOutboundRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'service' => 'required|integer|exists:services,id',
+            'internal_delivery_note_number' => 'nullable|integer',
         ];
     }
 }

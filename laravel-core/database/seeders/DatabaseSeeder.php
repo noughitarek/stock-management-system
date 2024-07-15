@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Inbound;
 use App\Models\Product;
 use App\Models\Service;
+use App\Models\Outbound;
 use App\Models\Rubrique;
 use App\Models\Supplier;
 use Illuminate\Database\Seeder;
@@ -26,10 +27,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'noughitarek@gmail.com',
             'password' => Hash::make('password'),
         ]);
-        #Rubrique::factory()->count(10)->create();
-        #Product::factory()->count(10)->create();
-        #Service::factory()->count(10)->create();
-        #Supplier::factory()->count(10)->create();
-        #Inbound::factory()->count(100)->create();
+        Rubrique::factory()->count(10)->create();
+        Product::factory()->count(10)->create();
+        Service::factory()->count(10)->create();
+        Supplier::factory()->count(10)->create();
+        Inbound::factory()->count(100)->create();
+        Outbound::factory()->count(100)->create();
     }
 }

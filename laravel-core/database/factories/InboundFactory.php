@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Inbound;
-use App\Models\InboundProduct;
-use App\Models\Product;
-use App\Models\Supplier;
 use App\Models\User;
+use App\Models\Inbound;
+use App\Models\Product;
+use App\Models\Rubrique;
+use App\Models\Supplier;
+use App\Models\InboundProduct;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InboundFactory extends Factory
@@ -20,8 +21,10 @@ class InboundFactory extends Factory
     {
         $users = User::pluck('id')->toArray();
         $suppliers = Supplier::pluck('id')->toArray();
-
+        $rubriques = Rubrique::pluck('id')->toArray();
+        
         return [
+            'rubrique' => $rubriques[array_rand($rubriques)],
             "commande_note_number" => $this->faker->numberBetween(1, 50),
             "delivery_note_number" => $this->faker->numberBetween(1, 50),
             "invoice_number" => $this->faker->numberBetween(1, 50),

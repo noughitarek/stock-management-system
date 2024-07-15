@@ -24,6 +24,7 @@ export interface Rubrique{
     id: number;
     name: string;
     description: string;
+    products: Product[];
     created_at: Date;
     updated_at: Date;
     created_by: User;
@@ -39,6 +40,9 @@ export interface Product{
     updated_at: Date;
     created_by: User;
     updated_by: User;
+    inbounds?: number;
+    outbounds?: number;
+    stock?: number;
 }
 
 export interface Supplier{
@@ -91,4 +95,28 @@ export interface Inbound{
 export interface Inbounds{
     rubrique: Rubrique;
     inbounds: Inbound[];
+}
+
+
+
+export interface OutboundProducts{
+    id: number;
+    rubrique: Rubrique;
+    product: Product;
+    qte: number;
+}
+export interface Outbound{
+    id: number;
+    internal_delivery_note_number: number;
+    service: Service;
+    outbound_products: OutboundProducts[];
+    created_at: Date;
+    updated_at: Date;
+    created_by: User;
+    updated_by: User;
+}
+
+export interface Outbounds{
+    rubrique: Rubrique;
+    outbounds: Outbound[];
 }

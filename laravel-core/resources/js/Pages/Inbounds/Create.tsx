@@ -41,15 +41,7 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
         {
             setData(prevData => ({
                 ...prevData,
-                products: [{
-                        id: 1,
-                        product: products[0],
-                        unit_price_excl_tax: 0,
-                        unit_price_net: 0,
-                        qte: 0,
-                        total_amount_excl_tax: 0,
-                        total_amount_net: 0,
-                    }]
+                products: []
             }));
         }
     }, []);
@@ -90,10 +82,10 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
         setCreating(false);
     }
 
-    const addProduct = () => {
-        const newProductId = data.products.length + 1;
-        const newProduct = {
-            id: newProductId,
+    const addInbound = () => {
+        const newInboundId = data.products.length + 1;
+        const newInbound = {
+            id: newInboundId,
             product: products[0],
             unit_price_excl_tax: 0,
             unit_price_net: 0,
@@ -104,11 +96,11 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
     
         setData(prevData => ({
             ...prevData,
-            products: [...prevData.products, newProduct]
+            products: [...prevData.products, newInbound]
         }));
     };
 
-    const removeProduct = (index: number) => {
+    const removeInbound = (index: number) => {
         const updatedProducts = [...data.products];
         updatedProducts.splice(index, 1);
         setData(prevData => ({
@@ -250,7 +242,7 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                         </div>
                     </div>
                 </Grid>
-                <Grid title="Information des produits" header={<Button className="btn btn-primary" onClick={addProduct}>+ de produits</Button>}>
+                <Grid title="Information des produits" header={<Button className="btn btn-primary" onClick={addInbound}>+ de produits</Button>}>
                         <>
                             {data.products.map((product, index) => (
                                 <div key={index} className="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
@@ -338,7 +330,7 @@ const CreateInbound: React.FC<PageProps<{ products: Product[], suppliers: Suppli
                                         <div className="form-help text-right">Montant / TTC</div>
                                     </div>
                                     <div>
-                                        <Button className="btn btn-primary" onClick={() => removeProduct(index)}>-</Button>
+                                        <Button className="btn btn-primary" onClick={() => removeInbound(index)}>-</Button>
                                     </div>
                                 </div>
                             ))}

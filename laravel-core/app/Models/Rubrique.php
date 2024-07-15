@@ -26,4 +26,8 @@ class Rubrique extends Model
     {
         return $this->hasMany(InboundProduct::class, 'inbound');
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'rubrique');
+    }
 }

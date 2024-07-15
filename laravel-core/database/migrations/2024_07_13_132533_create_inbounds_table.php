@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('delivery_note_number')->index()->nullable();
             $table->integer('invoice_number')->index()->nullable();
 
-            $table->foreignId('supplier')->constrained('suppliers');
+            $table->foreignId('supplier')->nullable()->constrained('suppliers');
 
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');

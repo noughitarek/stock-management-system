@@ -137,7 +137,7 @@ const ServicesTable: React.FC<PageProps> = ({ services, searchTerm }) => {
                                 </td>
                                 <td className="table-report__action w-56">
                                     <div className="flex justify-center items-center">
-                                        <Link className="flex items-center mr-3" href={route('rubriques.edit', { rubrique: service.id })}>
+                                        <Link className="flex items-center mr-3" href={route('services.edit', { service: service.id })}>
                                             <CheckSquare className="w-4 h-4 mr-1"/> Modifier
                                         </Link>
                                         <Button className="flex items-center text-danger" onClick={(event) => handleDeleteClick(event, service.id)}>

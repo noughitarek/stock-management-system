@@ -21,7 +21,7 @@ return new class extends Migration
             $table->double('total_amount_excl_tax');
             $table->double('total_amount_net');
 
-            $table->foreignId('inbound')->constrained('inbounds');
+            $table->foreignId('outbound')->constrained('outbounds');
 
             $table->timestamps();
         });

@@ -34,4 +34,42 @@ class Product extends Model
     {
         return $this->hasMany(OutboundProduct::class, 'product');
     }
+    public function unit_price_excl_tax()
+    {
+        return 0;
+    }
+    public function unit_price_net()
+    {
+        return 0;
+    }
+    public function total_amount_excl_tax()
+    {
+        return 0;
+    }
+    public function total_amount_net()
+    {
+        return 0;
+    }
+    public function inbounds()
+    {
+        $qte = 0;
+        foreach($this->inboundProducts as $inProduct)
+        {
+            $qte += $inProduct->qte;
+        }
+        return $qte;
+    }
+    public function outbounds()
+    {
+        $qte = 0;
+        foreach($this->outboundProducts as $outProduct)
+        {
+            $qte += $outProduct->qte;
+        }
+        return $qte;
+    }
+    public function stock()
+    {
+        return $this->inbounds()-$this->outbounds();
+    }
 }

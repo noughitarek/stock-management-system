@@ -78,9 +78,9 @@ const EditInbound: React.FC<PageProps<{ products: Product[], suppliers: Supplier
     }
 
     const addProduct = () => {
-        const newProductId = data.products.length + 1;
-        const newProduct = {
-            id: newProductId,
+        const newInboundId = data.products.length + 1;
+        const newInbound = {
+            id: newInboundId,
             product: products[0],
             unit_price_excl_tax: 0,
             unit_price_net: 0,
@@ -91,7 +91,7 @@ const EditInbound: React.FC<PageProps<{ products: Product[], suppliers: Supplier
     
         setData(prevData => ({
             ...prevData,
-            products: [...prevData.products, newProduct]
+            products: [...prevData.products, newInbound]
         }));
     };
 

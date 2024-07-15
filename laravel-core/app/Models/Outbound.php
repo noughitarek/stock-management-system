@@ -8,4 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class Outbound extends Model
 {
     use HasFactory;
+    protected $fillable = ["internal_delivery_note_number", "service", "created_by", "updated_by", "deleted_by", "deleted_at"];
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by')->withDefault();
+    }
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by')->withDefault();
+    }
+    public function outboundProducts()
+    {
+        return $this->hasMany(OutboundProduct::class, 'outbound');
+    }
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service');
+    }
 }
