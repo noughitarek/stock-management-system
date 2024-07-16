@@ -92,7 +92,7 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                         <Link href={activeInbound ? route('inbounds.create', {rubrique: activeInbound.rubrique.id}): '#'} className="btn btn-primary shadow-md mr-2">Créer une entrée</Link>
                         </div>
                     </div>
-                    <div className="intro-y col-span-12 overflow-auto lg:overflow-visible">
+                    <div className="intro-y overflow-auto">
                         <table className="table table-report -mt-2">
                             <thead>
                                 <tr>
@@ -138,7 +138,9 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                             return (
                                                 <div className="flex flex-col space-y-1" key={productIndex}>
                                                     <span className='font-medium whitespace-nowrap'>
-                                                        {product.product.designation}
+                                                        {product.product.designation.length > 30
+                                                            ? `${product.product.designation.substring(0, 30)}...`
+                                                            : product.product.designation}
                                                     </span>
                                                  </div>
                                             )
@@ -148,7 +150,7 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
                                                 <div className="flex flex-col space-y-1" key={productIndex}>
-                                                    <span className='font-medium whitespace-nowrap'>
+                                                    <span className='font-medium'>
                                                         {product.qte}
                                                     </span>
                                                  </div>
@@ -159,8 +161,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
                                                 <div className="flex flex-col space-y-1" key={productIndex}>
-                                                    <span className='font-medium whitespace-nowrap'>
-                                                        <b>{product.unit_price_excl_tax}</b> DZD
+                                                    <span className='font-medium'>
+                                                        <b>{product.unit_price_excl_tax}</b>
                                                     </span>
                                                  </div>
                                             )
@@ -170,8 +172,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
                                                 <div className="flex flex-col space-y-1" key={productIndex}>
-                                                    <span className='font-medium whitespace-nowrap'>
-                                                        <b>{product.total_amount_excl_tax}</b> DZD
+                                                    <span className='font-medium'>
+                                                        <b>{product.total_amount_excl_tax}</b>
                                                     </span>
                                                  </div>
                                             )
@@ -181,8 +183,8 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
                                                 <div className="flex flex-col space-y-1" key={productIndex}>
-                                                    <span className='font-medium whitespace-nowrap'>
-                                                        <b>{product.unit_price_net}</b> DZD
+                                                    <span className='font-medium'>
+                                                        <b>{product.unit_price_net}</b>
                                                     </span>
                                                  </div>
                                             )
@@ -192,21 +194,21 @@ const InboundsIndex: React.FC<PageProps<{ inbounds: Inbounds[], from:number, to:
                                         {inbound.inbound_products.map((product, productIndex)=>{
                                             return (
                                                 <div className="flex flex-col space-y-1" key={productIndex}>
-                                                    <span className='font-medium whitespace-nowrap'>
-                                                        <b>{product.total_amount_net}</b> DZD
+                                                    <span className='font-medium'>
+                                                        <b>{product.total_amount_net}</b>
                                                     </span>
                                                  </div>
                                             )
                                         }) }
                                     </td>
                                     <td>
-                                        <div className="flex flex-col space-y-1">
-                                            <Link href="" className="font-medium text-primary whitespace-nowrap">
+                                        <div className="flex flex-col space-y-1 whitespace-nowrap">
+                                            <Link href="" className="font-medium text-primary">
                                                 Bon de commande 
                                             </Link>
                                          </div>
-                                        <div className="flex flex-col space-y-1">
-                                            <Link href="" className="font-medium text-primary whitespace-nowrap">
+                                        <div className="flex flex-col space-y-1 whitespace-nowrap">
+                                            <Link href="" className="font-medium text-primary">
                                                 Bon de livraison
                                             </Link>
                                          </div>

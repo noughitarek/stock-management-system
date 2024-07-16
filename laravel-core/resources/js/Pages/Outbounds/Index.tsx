@@ -92,7 +92,7 @@ const OutboundsIndex: React.FC<PageProps<{ outbounds: Outbounds[], from:number, 
                         <Link href={activeOutbound ? route('outbounds.create'): '#'} className="btn btn-primary shadow-md mr-2">Créer une sortie</Link>
                         </div>
                     </div>
-                    <div className="intro-y col-span-12 overflow-auto lg:overflow-visible">
+                    <div className="intro-y col-span-12 overflow-auto">
                         <table className="table table-report -mt-2">
                             <thead>
                                 <tr>

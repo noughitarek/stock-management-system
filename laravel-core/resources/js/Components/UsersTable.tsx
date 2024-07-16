@@ -1,7 +1,7 @@
 import React, { ReactNode, useState, useEffect } from 'react';
 import { User } from '@/types';
 import Pagination from './Pagination';
-import { AtSign, Blocks, Calendar, CheckSquare, Hash, MapPin, Phone, Trash2, User as UserIcon} from 'lucide-react';
+import { AtSign, Blocks, Calendar, CheckSquare, Hash, MapPin, Phone, Trash2, UserCog, User as UserIcon} from 'lucide-react';
 import { Link, router, useForm } from '@inertiajs/react';
 import { Button } from '@headlessui/react';
 import DeleteModal from './DeleteModal';
@@ -121,11 +121,11 @@ const UsersTable: React.FC<PageProps> = ({ users, searchTerm }) => {
                                     <div className="flex items-center">
                                         <div className="ml-4">
                                             <div className="flex items-center mt-1">
-                                                <Phone className="h-4 w-4 text-gray-500 mr-1" />
+                                                <UserCog className="h-4 w-4 text-gray-500 mr-1" />
                                                 <span className="text-gray-500">{user.role}</span>
                                             </div>
                                             <div className="flex items-center">
-                                                <MapPin className="h-4 w-4 text-gray-500 mr-1" />
+                                                <UserCog className="h-4 w-4 text-gray-500 mr-1" />
                                                 <span className="text-gray-500">{user.permissions}</span>
                                             </div>
                                         </div>

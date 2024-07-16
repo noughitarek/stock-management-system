@@ -19,7 +19,7 @@ const Webmaster: React.FC<WebmasterProps> = ({ user, menu, breadcrumb, children 
             <div className="flex mt-[4.7rem] md:mt-0 overflow-hidden">
                 <SideMenu menuItems={menu} />
                 <div className="content">
-                    <Topbar breadcrumb={breadcrumb}/>
+                    <Topbar breadcrumb={breadcrumb} user={user}/>
                     {children}
                 </div>
             </div>
