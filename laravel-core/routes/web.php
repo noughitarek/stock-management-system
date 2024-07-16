@@ -3,11 +3,13 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\InboundController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\OutboundController;
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\SupplierController;
@@ -73,6 +75,18 @@ Route::middleware(['auth'])->group(function () {
         'update' => 'services.update',
         'destroy' => 'services.destroy',
     ]);
+    Route::resource('users', UserController::class)->names([
+        'index' => 'users.index',
+        'create' => 'users.create',
+        'store' => 'users.store',
+        'show' => 'users.show',
+        'edit' => 'users.edit',
+        'update' => 'users.update',
+        'destroy' => 'users.destroy',
+    ]);
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+
+    Route::get('/test', [SettingController::class, 'test'])->name('settings');
 });
 
 /*

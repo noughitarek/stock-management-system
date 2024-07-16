@@ -18,6 +18,11 @@ export interface User{
     id: number;
     name: string;
     role: string;
+    permissions: string;
+    created_at: Date;
+    updated_at: Date;
+    created_by: User;
+    updated_by: User;
 }
 
 export interface Rubrique{

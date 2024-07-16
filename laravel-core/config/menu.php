@@ -70,16 +70,17 @@ return array(
 
     array(
         "type" => "link",
-        "content" => "Users",
-        "section" => "dashboard",
-        "route" => "dashboard",
+        "content" => "Utilisateurs",
+        "active_when" => ["App\Http\Controllers\UserController#"],
+        "route" => "/users",
         "icon" => array("type" => "lucide", "content" => "Users"),
     ),
     array(
         "type" => "link",
-        "content" => "Settings",
-        "section" => "dashboard",
-        "route" => "dashboard",
+        "content" => "Paramétres",
+        "active_when" => ["App\Http\Controllers\SettingController@index"],
+        "section" => "settings",
+        "route" => "/settings",
         "icon" => array("type" => "lucide", "content" => "Settings"),
     ),
 
