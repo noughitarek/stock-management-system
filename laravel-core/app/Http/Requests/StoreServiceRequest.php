@@ -12,7 +12,7 @@ class StoreServiceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->Has_Permissions('create_services');
+        return Auth::user()->Has_Permission('services_create');
     }
 
     /**
@@ -24,7 +24,7 @@ class StoreServiceRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
             'responsible_name' => 'nullable|string|max:255',
             'responsible_phone' => 'nullable|string|max:255',
         ];

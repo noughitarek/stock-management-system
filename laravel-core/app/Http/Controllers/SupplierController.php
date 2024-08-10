@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
 use App\Models\Supplier;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
@@ -19,22 +19,11 @@ class SupplierController extends Controller
         ->whereNull('deleted_at')
         ->whereNull('deleted_by')
         ->orderBy('id', 'desc')
-        ->get()->toArray();
-        
-        return Inertia::render('Suppliers/Index', [
-            'suppliers' => $suppliers,
-            'from' => 1,
-            'to' => count($suppliers),
-            'total' => count($suppliers),
-        ]);
-    }
+        ->paginate(25)
+        ->onEachSide(2);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return Inertia::render('Suppliers/Create');
+        return view('pages.suppliers.index')
+        ->with('suppliers', $suppliers);
     }
 
     /**
@@ -43,33 +32,16 @@ class SupplierController extends Controller
     public function store(StoreSupplierRequest $request)
     {
         $supplier = Supplier::create([
-            "name" => $request->input('name'),
-            "phone" => $request->input('phone'),
-            "address" => $request->input('address'),
-            "description" => $request->input('description'),
-            "created_by"  => Auth::user()->id,
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'description' => $request->input('description'),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
-        if($supplier){
-            return redirect()->route('suppliers.index')->with('success', 'Supplier created successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Supplier could not be created.');
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Supplier $supplier)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Supplier $supplier)
-    {
-        return Inertia::render('Suppliers/Edit', ["supplier" => $supplier]);
+        return redirect()
+        ->route('suppliers')
+        ->with('success', 'Foucnisseur créé avec succès');
     }
 
     /**
@@ -78,17 +50,16 @@ class SupplierController extends Controller
     public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
         $supplier->update([
-            "name" => $request->input('name'),
-            "phone" => $request->input('phone'),
-            "address" => $request->input('address'),
-            "description" => $request->input('description'),
-            "updated_by"  => Auth::user()->id,
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'description' => $request->input('description'),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
-        if($supplier->wasChanged()){
-            return redirect()->route('suppliers.index')->with('success', 'Supplier updated successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Supplier could not be updated.');
-        }
+        return redirect()
+        ->route('suppliers')
+        ->with('success', 'Foucnisseur édité avec succès');
     }
 
     /**
@@ -97,13 +68,11 @@ class SupplierController extends Controller
     public function destroy(Supplier $supplier)
     {
         $supplier->update([
-            "deleted_at"  => now(),
-            "deleted_by"  => Auth::user()->id,
+            'deleted_by' => Auth::id(),
+            'deleted_at' => now(),
         ]);
-        if($supplier->wasChanged()){
-            return redirect()->route('suppliers.index')->with('success', 'Supplier deleted successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Supplier could not be deleted.');
-        }
+        return redirect()
+        ->route('suppliers')
+        ->with('success', 'Fournisseur supprimé avec succès');
     }
 }

@@ -12,7 +12,7 @@ class StoreRubriqueRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->Has_Permissions('create_rubrique');
+        return Auth::user()->Has_Permission('rubriques_create');
     }
 
     /**
@@ -24,7 +24,7 @@ class StoreRubriqueRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
         ];
     }
 }

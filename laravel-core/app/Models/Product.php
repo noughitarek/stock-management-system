@@ -8,68 +8,40 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['designation', 'rubrique', 'description', 'pictures', 'created_by', 'updated_by', 'deleted_by', 'deleted_at'];
-
-    public function createdBy()
-    {
+    protected $fillable = [
+        'designation',
+        'rubrique_id',
+        'description',
+        'init_stock',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+        'deleted_at',
+    ];
+    
+    
+    public function createdBy(){
         return $this->belongsTo(User::class, 'created_by');
     }
-    public function updatedBy()
-    {
+    public function updatedBy(){
         return $this->belongsTo(User::class, 'updated_by')->withDefault();
     }
-    public function deletedBy()
-    {
+    public function deletedBy(){
         return $this->belongsTo(User::class, 'deleted_by')->withDefault();
     }
-    public function rubrique()
-    {
-        return $this->belongsTo(Rubrique::class, 'rubrique')->withDefault();
+    public function rubrique(){
+        return $this->belongsTo(Rubrique::class);
     }
-    public function inboundProducts()
+    public function total_inbounds()
     {
-        return $this->hasMany(InboundProduct::class, 'product');
+        return InboundProduct::where('product_id', $this->id)->sum('qte');
     }
-    public function outboundProducts()
+    public function total_outbounds()
     {
-        return $this->hasMany(OutboundProduct::class, 'product');
-    }
-    public function unit_price_excl_tax()
-    {
-        return 0;
-    }
-    public function unit_price_net()
-    {
-        return 0;
-    }
-    public function total_amount_excl_tax()
-    {
-        return 0;
-    }
-    public function total_amount_net()
-    {
-        return 0;
-    }
-    public function inbounds()
-    {
-        $qte = 0;
-        foreach($this->inboundProducts as $inProduct)
-        {
-            $qte += $inProduct->qte;
-        }
-        return $qte;
-    }
-    public function outbounds()
-    {
-        $qte = 0;
-        foreach($this->outboundProducts as $outProduct)
-        {
-            $qte += $outProduct->qte;
-        }
-        return $qte;
+        return OutboundProduct::where('product_id', $this->id)->sum('qte');
     }
     public function stock()
     {
-        return $this->inbounds()-$this->outbounds();
+        return $this->init_stock+$this->total_inbounds()-$this->total_outbounds();
     }
 }

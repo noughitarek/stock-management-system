@@ -12,7 +12,7 @@ class UpdateRubriqueRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->Has_Permissions('edit_rubrique');
+        return Auth::user()->Has_Permission('rubriques_edit');
     }
 
     /**
@@ -24,7 +24,7 @@ class UpdateRubriqueRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
         ];
     }
 }

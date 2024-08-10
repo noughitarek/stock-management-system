@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use App\Models\Product;
 use App\Models\Rubrique;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreRubriqueRequest;
 use App\Http\Requests\UpdateRubriqueRequest;
@@ -20,22 +19,12 @@ class RubriqueController extends Controller
         ->whereNull('deleted_at')
         ->whereNull('deleted_by')
         ->orderBy('id', 'desc')
-        ->get()->toArray();
-        
-        return Inertia::render('Rubriques/Index', [
-            'rubriques' => $rubriques,
-            'from' => 1,
-            'to' => count($rubriques),
-            'total' => count($rubriques),
-        ]);
-    }
+        ->paginate(25)
+        ->onEachSide(2);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return Inertia::render('Rubriques/Create');
+        return view('pages.rubriques.index')
+        ->with('rubriques', $rubriques);
+
     }
 
     /**
@@ -46,29 +35,12 @@ class RubriqueController extends Controller
         $rubrique = Rubrique::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'created_by' => Auth::user()->id,
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
-        if ($rubrique) {
-            return redirect()->route('rubriques.index')->with('success', 'Rubrique created successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Rubrique could not be created.');
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Rubrique $rubrique)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Rubrique $rubrique)
-    {
-        return Inertia::render('Rubriques/Edit', ['rubrique' => $rubrique]);
+        return redirect()
+        ->route('rubriques')
+        ->with('success', 'Rubrique créé avec succès');
     }
 
     /**
@@ -79,14 +51,11 @@ class RubriqueController extends Controller
         $rubrique->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'updated_by' => Auth::user()->id,
+            'updated_by' => Auth::id(),
         ]);
-    
-        if ($rubrique->wasChanged()) {
-            return redirect()->route('rubriques.index')->with('success', 'Rubrique edited successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Rubrique could not be edited.');
-        }
+        return redirect()
+        ->route('rubriques')
+        ->with('success', 'Rubrique édité avec succès');
     }
 
     /**
@@ -95,18 +64,17 @@ class RubriqueController extends Controller
     public function destroy(Rubrique $rubrique)
     {
         $rubrique->update([
-            'deleted_by' => Auth::user()->id,
+            'deleted_by' => Auth::id(),
             'deleted_at' => now(),
         ]);
-        Product::where('rubrique', $rubrique->id)->update([
-            'deleted_by' => Auth::user()->id,
-            'deleted_at' => now(),
-        ]);
-    
-        if ($rubrique->wasChanged()) {
-            return redirect()->route('rubriques.index')->with('success', 'Rubrique deleted successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Rubrique could not be deleted.');
+        foreach($rubrique->products as $product){
+            $product->update([
+                'deleted_by' => Auth::id(),
+                'deleted_at' => now(),
+            ]);
         }
+        return redirect()
+        ->route('rubriques')
+        ->with('success', 'Rubrique supprimé avec succès');
     }
 }

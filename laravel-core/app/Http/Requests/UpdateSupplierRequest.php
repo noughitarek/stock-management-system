@@ -12,7 +12,7 @@ class UpdateSupplierRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->Has_Permissions('edit_suppliers');
+        return Auth::user()->Has_Permission('suppliers_edit');
     }
 
     /**
@@ -26,7 +26,7 @@ class UpdateSupplierRequest extends FormRequest
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
         ];
     }
 }

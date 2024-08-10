@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
@@ -14,26 +14,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with(['createdBy', 'updatedBy', 'deletedBy'])
-        ->whereNull('deleted_at')
-        ->whereNull('deleted_by')
-        ->orderBy('id', 'desc')
-        ->get()->toArray();
-        
-        return Inertia::render('Users/Index', [
-            'users' => $users,
-            'from' => 1,
-            'to' => count($users),
-            'total' => count($users),
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $users = User::where('deleted_at', null)->paginate(20)->onEachSide(2);
+        return view('pages.users.index')->with('users', $users);
     }
 
     /**
@@ -41,23 +23,14 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
+        User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'role' => $request->input('role'),
+            'permissions' => implode(',',$request->input('permissions')),
+        ]);
+        return back()->with("success", "user has been created successfully");
     }
 
     /**
@@ -65,7 +38,13 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => $request->input('role'),
+            'permissions' => implode(',',$request->input('permissions')),
+        ]);
+        return back()->with("success", "user has been updated successfully");
     }
 
     /**
@@ -73,6 +52,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->update([
+            'email' => '',
+            'password' => '',
+            'permissions' => '',
+            'deleted_at' => now()
+        ]);
+        return back()->with("success", "user has been deleted successfully");
     }
 }

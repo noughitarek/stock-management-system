@@ -12,7 +12,7 @@ class UpdateProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->Has_Permissions('edit_products');
+        return Auth::user()->Has_Permission('products_edit');
     }
 
     /**
@@ -24,8 +24,9 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'designation' => 'required|string|max:255',
-            'rubrique' => 'required|exists:rubriques,id|integer',
-            'description' => 'nullable|string',
+            'rubrique_id' => 'required|integer|exists:rubriques,id',
+            'description' => 'nullable|string|max:255',
+            'init_stock' => 'required|integer',
         ];
     }
 }

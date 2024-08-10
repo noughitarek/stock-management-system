@@ -12,7 +12,7 @@ class UpdateOutboundRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->Has_Permissions('edit_outbound');
+        return Auth::user()->Has_Permission('outbounds_edit');
     }
 
     /**
@@ -23,8 +23,7 @@ class UpdateOutboundRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'service' => 'required|integer|exists:services,id',
-            'internal_delivery_note_number' => 'nullable|integer',
+            //
         ];
     }
 }

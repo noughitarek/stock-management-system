@@ -12,7 +12,7 @@ class UpdateInboundRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->Has_Permissions('edit_inbound');
+        return Auth::user()->Has_Permission('inbounds_edit');
     }
 
     /**
@@ -23,11 +23,12 @@ class UpdateInboundRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rubrique' => 'required|integer|exists:rubriques,id',
-            'commande_note_number' => 'nullable|integer',
-            'delivery_note_number' => 'nullable|integer',
-            'invoice_number' => 'nullable|integer',
-            'supplier' => 'required|integer|exists:suppliers,id',
+            'inbound_at' => 'required|datetime',
+            'rubrique_id' => 'required|exists:rubrique,id',
+            'commande_note_number' => 'nullable|string|max:255',
+            'delivery_note_number' => 'nullable|string|max:255',
+            'invoice_number'  => 'nullable|string|max:255',
+            'supplier_id' => 'required|exists:rubrique,id',
         ];
     }
 }

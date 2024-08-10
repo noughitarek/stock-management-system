@@ -11,6 +11,28 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public function Has_Permission($permissions)
+    {
+        if($this->permissions != null)
+        {
+            if(is_array($permissions))
+            {
+                foreach($permissions as $permission)
+                {
+                    if($this->Has_Permission($permission))
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                return in_array($permissions ,explode(',', $this->permissions));
+            }
+        }
+        return false;
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +42,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'permissions',
+        'deleted_at'
     ];
 
     /**
@@ -43,34 +68,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-    public function createdRubriques()
-    {
-        return $this->hasMany(Rubrique::class, 'created_by');
-    }
-    public function updatedRubriques()
-    {
-        return $this->hasMany(Rubrique::class, 'updated_by');
-    }
-    public function deletedRubriques()
-    {
-        return $this->hasMany(Rubrique::class, 'deleted_by');
-    }
-
-    public function Has_Permissions($permissions)
-    {
-        return true;
-    }
-    public function createdBy()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-    public function updatedBy()
-    {
-        return $this->belongsTo(User::class, 'updated_by')->withDefault();
-    }
-    public function deletedBy()
-    {
-        return $this->belongsTo(User::class, 'deleted_by')->withDefault();
     }
 }

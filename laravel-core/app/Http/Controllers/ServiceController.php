@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
 use App\Models\Service;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
@@ -19,22 +19,11 @@ class ServiceController extends Controller
         ->whereNull('deleted_at')
         ->whereNull('deleted_by')
         ->orderBy('id', 'desc')
-        ->get()->toArray();
-        
-        return Inertia::render('Services/Index', [
-            'services' => $services,
-            'from' => 1,
-            'to' => count($services),
-            'total' => count($services),
-        ]);
-    }
+        ->paginate(25)
+        ->onEachSide(2);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return Inertia::render('Services/Create');
+        return view('pages.services.index')
+        ->with('services', $services);
     }
 
     /**
@@ -43,33 +32,16 @@ class ServiceController extends Controller
     public function store(StoreServiceRequest $request)
     {
         $service = Service::create([
-            "name" => $request->input('name'),
-            "description" => $request->input('description'),
-            "responsible_name"  => $request->input('responsible_name'),
-            "responsible_phone" => $request->input('responsible_phone'),
-            "created_by" => Auth::user()->id,
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'responsible_name' => $request->input('responsible_name'),
+            'responsible_phone' => $request->input('responsible_phone'),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
-        if($service){
-            return redirect()->route('services.index')->with('success', 'Service created successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Service could not be created.');
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Service $service)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Service $service)
-    {
-        return Inertia::render('Services/Edit', ['service' => $service]);
+        return redirect()
+        ->route('services')
+        ->with('success', 'Service créé avec succès');
     }
 
     /**
@@ -78,17 +50,16 @@ class ServiceController extends Controller
     public function update(UpdateServiceRequest $request, Service $service)
     {
         $service->update([
-            "name" => $request->input('name'),
-            "description" => $request->input('description'),
-            "responsible_name"  => $request->input('responsible_name'),
-            "responsible_phone" => $request->input('responsible_phone'),
-            "updated_by" => Auth::user()->id,
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'responsible_name' => $request->input('responsible_name'),
+            'responsible_phone' => $request->input('responsible_phone'),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
-        if($service->wasChanged()){
-            return redirect()->route('services.index')->with('success', 'Service updated successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Service could not be updated.');
-        }
+        return redirect()
+        ->route('services')
+        ->with('success', 'Service édité avec succès');
     }
 
     /**
@@ -97,13 +68,11 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         $service->update([
-            "deleted_at" => now(),
-            "deleted_by" => Auth::user()->id,
+            'deleted_by' => Auth::id(),
+            'deleted_at' => now(),
         ]);
-        if($service->wasChanged()){
-            return redirect()->route('services.index')->with('success', 'Service deleted successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Service could not be deleted.');
-        }
+        return redirect()
+        ->route('services')
+        ->with('success', 'Service supprimé avec succès');
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\Rubrique;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -16,31 +16,25 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['createdBy', 'updatedBy', 'deletedBy', 'rubrique'])
+        $rubriques = Rubrique::with(['createdBy', 'updatedBy', 'deletedBy', 'products'])
         ->whereNull('deleted_at')
         ->whereNull('deleted_by')
         ->orderBy('id', 'desc')
-        ->get()->toArray();
-        
-        return Inertia::render('Products/Index', [
-            'products' => $products,
-            'from' => 1,
-            'to' => count($products),
-            'total' => count($products),
-        ]);
-    }
+        ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $rubriques = Rubrique::with(['createdBy', 'updatedBy', 'deletedBy'])
-        ->whereNull('deleted_at')
-        ->whereNull('deleted_by')
-        ->orderBy('id', 'desc')
-        ->get()->toArray();
-        return Inertia::render('Products/Create', ['rubriques' => $rubriques]);
+        foreach($rubriques as &$rubrique){
+            $rubrique->products = Product::with(['createdBy', 'updatedBy', 'deletedBy'])
+            ->whereNull('deleted_at')
+            ->whereNull('deleted_by')
+            ->where('rubrique_id',  $rubrique->id)
+            ->orderBy('id', 'desc')
+            ->paginate(25)
+            ->onEachSide(2);
+        }
+        
+        return view('pages.products.index')
+        ->with('rubriques', $rubriques)
+        ->with('activeRubrique', $rubriques->first()->id??0);
     }
 
     /**
@@ -50,37 +44,15 @@ class ProductController extends Controller
     {
         $product = Product::create([
             'designation' => $request->input('designation'),
-            'rubrique' => $request->input('rubrique'),
+            'rubrique_id' => $request->input('rubrique_id'),
             'description' => $request->input('description'),
-            'created_by' => Auth::user()->id, 
+            'init_stock' => $request->input('init_stock'),
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
-        if ($product) {
-            return redirect()->route('products.index')->with('success', 'Product created successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Product could not be created.');
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        $product = Product::with('rubrique')->find($product->id);
-        $rubriques = Rubrique::with(['createdBy', 'updatedBy', 'deletedBy'])
-        ->whereNull('deleted_at')
-        ->whereNull('deleted_by')
-        ->orderBy('id', 'desc')
-        ->get()->toArray();
-        return Inertia::render('Products/Edit', ['rubriques' => $rubriques, 'product' => $product]);
+        return redirect()
+        ->route('products')
+        ->with('success', 'Produit créé avec succès');
     }
 
     /**
@@ -90,16 +62,14 @@ class ProductController extends Controller
     {
         $product->update([
             'designation' => $request->input('designation'),
-            'rubrique' => $request->input('rubrique'),
+            'rubrique_id' => $request->input('rubrique_id'),
             'description' => $request->input('description'),
-            'updated_by' => Auth::user()->id,
+            'init_stock' => $request->input('init_stock'),
+            'updated_by' => Auth::id(),
         ]);
-
-        if ($product->wasChanged()) {
-            return redirect()->route('products.index')->with('success', 'Product edited successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Product could not be edited.');
-        }
+        return redirect()
+        ->route('products')
+        ->with('success', 'Produit édité avec succès');
     }
 
     /**
@@ -108,14 +78,11 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->update([
-            'deleted_by' => Auth::user()->id,
+            'deleted_by' => Auth::id(),
             'deleted_at' => now(),
         ]);
-    
-        if ($product->wasChanged()) {
-            return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Product could not be deleted.');
-        }
+        return redirect()
+        ->route('rubriques')
+        ->with('success', 'Produit supprimé avec succès');
     }
 }
